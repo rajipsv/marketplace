@@ -5,6 +5,9 @@ import { BadgeCheck, CalendarClock, Check, Clock, Languages, Users, Video } from
 import { Avatar } from "@/components/avatar";
 import { LocalTime } from "@/components/local-time";
 import { BookingCta } from "@/components/sessions/booking-cta";
+import { ShareButtons } from "@/components/share-buttons";
+import { siteConfig } from "@/config/site";
+import { getPromo } from "@/lib/coupons";
 import { getOfferingBySlug, type OfferingDetail } from "@/lib/queries";
 import type { Format } from "@/lib/types";
 import { coachFacts, formatUsd, mediaUrl } from "@/lib/utils";
@@ -69,7 +72,7 @@ const faqs = (o: OfferingDetail) => [
 ];
 
 export default async function SessionPage({ params }: Props) {
-  const offering = await getOfferingBySlug((await params).slug);
+  const [offering, promo] = await Promise.all([getOfferingBySlug((await params).slug), getPromo(siteConfig.promoCode)]);
   if (!offering) notFound();
   const { coach } = offering;
   const ctaLabel = offering.format === "one-on-one" ? "Choose a time" : offering.priceUsd === 0 ? "Book free trial" : "Book";
@@ -113,6 +116,13 @@ export default async function SessionPage({ params }: Props) {
               <span className="block text-sm text-muted">{coach.title}</span>
             </span>
           </Link>
+
+          <div className="mt-5">
+            <ShareButtons
+              path={`/sessions/${offering.slug}`}
+              text={`${offering.title} with ${coach.name} — live online classes for US families:`}
+            />
+          </div>
 
           <ul className="mt-6 grid gap-3 rounded-2xl border border-border bg-surface p-5 text-sm sm:grid-cols-3">
             <li className="flex items-center gap-2">
@@ -218,6 +228,11 @@ export default async function SessionPage({ params }: Props) {
             </div>
             <BookingCta slug={offering.slug} label={ctaLabel} className="mt-5" />
             <p className="mt-3 text-center text-xs text-muted">Pay in USD · Free to join</p>
+            {promo && offering.priceUsd > 0 && (
+              <p className="mt-3 rounded-xl bg-accent/20 px-3 py-2 text-center text-xs">
+                New here? Code <span className="font-mono font-semibold">{promo.code}</span>: {promo.description.toLowerCase()}
+              </p>
+            )}
           </div>
         </aside>
       </div>

@@ -4,6 +4,8 @@ import { CategoryTile } from "@/components/category-tile";
 import { CoachCard } from "@/components/coach-card";
 import { HeroSearch } from "@/components/hero-search";
 import { SessionCard } from "@/components/session-card";
+import { siteConfig } from "@/config/site";
+import { getPromo } from "@/lib/coupons";
 import { getCategories, getFeaturedCoaches, getOfferingCards } from "@/lib/queries";
 
 // Re-fetch catalogue data at most once a minute.
@@ -23,10 +25,11 @@ const steps = [
 ];
 
 export default async function Home() {
-  const [categories, coaches, offerings] = await Promise.all([
+  const [categories, coaches, offerings, promo] = await Promise.all([
     getCategories(),
     getFeaturedCoaches(),
     getOfferingCards(),
+    getPromo(siteConfig.promoCode),
   ]);
   const kids = offerings.filter((o) => o.audience === "kids").slice(0, 2);
   const popular = offerings.slice(0, 4);
@@ -51,6 +54,16 @@ export default async function Home() {
           <HeroSearch />
         </div>
       </section>
+
+      {promo && (
+        <section aria-label="Founding family offer" className="bg-accent/25">
+          <p className="mx-auto max-w-6xl px-4 py-3 text-center text-sm">
+            <span className="font-semibold">Founding families:</span> {promo.description} — use code{" "}
+            <span className="rounded-md bg-surface px-2 py-0.5 font-mono font-semibold">{promo.code}</span> when you book.
+            {promo.remaining != null && <span className="text-muted"> Only {promo.remaining} left.</span>}
+          </p>
+        </section>
+      )}
 
       {/* Trust strip */}
       <section aria-label="Why families trust us" className="border-y border-border bg-surface">

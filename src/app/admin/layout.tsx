@@ -9,7 +9,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="mx-auto max-w-6xl px-4 py-10">
       <div className="flex flex-wrap items-center gap-4 border-b border-border pb-4">
         <p className="font-display text-xl font-semibold">Admin</p>
-        <nav aria-label="Admin" className="flex gap-4 text-sm font-medium">
+        <nav aria-label="Admin" className="no-scrollbar flex gap-4 overflow-x-auto text-sm font-medium whitespace-nowrap">
           <Link href="/admin" className="text-muted hover:text-foreground">
             Overview
           </Link>
@@ -21,6 +21,9 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </Link>
           <Link href="/admin/requests" className="text-muted hover:text-foreground">
             Requests
+          </Link>
+          <Link href="/admin/coupons" className="text-muted hover:text-foreground">
+            Offer codes
           </Link>
         </nav>
       </div>

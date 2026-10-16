@@ -50,6 +50,10 @@ _Last updated: 2026-10-16_
 
 ## ⏳ Waiting on owner
 
+- [ ] **Fill business details** in `src/config/site.ts → legal` (name, operator, address, email, phone, jurisdiction) — must match GST/bank/KYC; then have a lawyer/CA review the legal pages
+- [ ] Decide who funds free/discounted classes (does the teacher still earn their 80% on FIRSTCLASS bookings?) — affects payouts in Phase 5
+- [ ] Before payments go live: confirmation emails (policies promise them) — Resend
+
 - [ ] **Company structure:** Indian Pvt Ltd with parents as directors (one resident director) who operate the business; confirm owner's permitted role with an immigration attorney (H-1B) and US/Indian tax filings with a cross-border CA
 - [ ] Parents sign up on the site with their own emails → `npm run make-admin -- <email>`; decide whether to keep or downgrade the current admin account
 - [ ] Razorpay / RazorpayX / bank in the company's name, operated by parents
@@ -95,6 +99,9 @@ _Last updated: 2026-10-16_
 - [x] Teacher Bookings + Admin Bookings views
 - [x] Demand capture: `/request` (request a time / a class) → Admin → Requests
 - [x] Go-to-market plan: `docs/go-to-market.md`
+- [x] Offer codes: admin-managed coupons (percent off, usage limit, first-booking-only, expiry), applied safely inside the booking; `?code=` links; founding offer **FIRSTCLASS** (first class free, 20 families, until 14 Jan 2027) promoted on home + class pages
+- [x] Share buttons (WhatsApp, copy link, native share) on class and teacher pages
+- [x] Legal pages: terms, privacy, cancellation & refunds, service delivery, disclaimer, contact, about (footer links; no dead links)
 
 ### Phase 4b — Payments & live classes
 - [ ] Checkout: Razorpay USD orders, webhook (signature, idempotency), PayPal option

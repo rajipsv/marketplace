@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Award, BadgeCheck, Languages, MapPin, ShieldCheck } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { SessionCard } from "@/components/session-card";
+import { ShareButtons } from "@/components/share-buttons";
 import { coachLocation, mediaUrl } from "@/lib/utils";
 import { getCoachBySlug } from "@/lib/queries";
 
@@ -72,6 +73,9 @@ export default async function CoachPage({ params }: Props) {
           )}
 
           {coach.bio && <p className="mt-5 max-w-3xl leading-relaxed text-muted">{coach.bio}</p>}
+          <div className="mt-5">
+            <ShareButtons path={`/coaches/${coach.slug}`} text={`${coach.name} — ${coach.title}, teaching live online classes for US families:`} />
+          </div>
         </div>
       </header>
 

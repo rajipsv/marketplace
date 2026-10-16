@@ -7,6 +7,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { booking, classSession, coach, familyMember, offering } from "@/db/schema";
 import { getSession } from "@/lib/auth";
+import { evaluateCoupon } from "@/lib/coupons";
 import { activeBookingStatuses, CANCEL_CUTOFF_HOURS, openSlots } from "@/lib/slots";
 import type { FormState } from "@/lib/validation";
 
@@ -15,6 +16,7 @@ const input = z.object({
   attendee: z.union([z.literal("self"), z.string().uuid()]),
   startsAt: z.string().datetime().optional(), // 1-on-1
   sessionId: z.string().uuid().optional(), // group / weekly
+  coupon: z.string().trim().max(40).optional(),
 });
 
 class BookingError extends Error {}
@@ -29,6 +31,7 @@ export async function createBooking(_prev: FormState, fd: FormData): Promise<For
     attendee: fd.get("attendee") || "self",
     startsAt: fd.get("startsAt") || undefined,
     sessionId: fd.get("sessionId") || undefined,
+    coupon: String(fd.get("coupon") ?? "") || undefined,
   });
   if (!parsed.success) return { error: "Please choose a time." };
   const p = parsed.data;
@@ -59,8 +62,25 @@ export async function createBooking(_prev: FormState, fd: FormData): Promise<For
     familyMemberId = m.id;
   }
 
-  // No payments yet: free classes confirm immediately, paid ones are reserved.
-  const status = o.priceUsdCents === 0 ? "confirmed" : "pending_payment";
+  // Price after any coupon, checked inside the booking transaction (row-locked).
+  // No payments yet: free bookings confirm immediately, paid ones are reserved.
+  const pricing = async (tx: Parameters<Parameters<typeof db.transaction>[0]>[0]) => {
+    let discount = 0;
+    let couponId: string | null = null;
+    if (p.coupon) {
+      const c = await evaluateCoupon(tx, p.coupon, userId, o.priceUsdCents, true);
+      if (!c.ok) throw new BookingError(c.error);
+      discount = c.discountCents;
+      couponId = c.id;
+    }
+    const price = o.priceUsdCents - discount;
+    return {
+      status: price === 0 ? ("confirmed" as const) : ("pending_payment" as const),
+      priceUsdCents: price,
+      discountUsdCents: discount,
+      couponId,
+    };
+  };
   let bookingId: string;
 
   try {
@@ -94,7 +114,7 @@ export async function createBooking(_prev: FormState, fd: FormData): Promise<For
           .returning({ id: classSession.id });
         const [b] = await tx
           .insert(booking)
-          .values({ sessionId: s.id, customerUserId: userId, familyMemberId, status, priceUsdCents: o.priceUsdCents })
+          .values({ sessionId: s.id, customerUserId: userId, familyMemberId, ...(await pricing(tx)) })
           .returning({ id: booking.id });
         return b.id;
       });
@@ -132,7 +152,7 @@ export async function createBooking(_prev: FormState, fd: FormData): Promise<For
 
         const [b] = await tx
           .insert(booking)
-          .values({ sessionId: s.id, customerUserId: userId, familyMemberId, status, priceUsdCents: o.priceUsdCents })
+          .values({ sessionId: s.id, customerUserId: userId, familyMemberId, ...(await pricing(tx)) })
           .returning({ id: booking.id });
         return b.id;
       });
@@ -167,4 +187,18 @@ export async function cancelBooking(fd: FormData) {
       await tx.update(classSession).set({ status: "cancelled" }).where(eq(classSession.id, row.sessionId));
   });
   revalidatePath("/my-sessions");
+}
+
+/** Lets the booking page show the discount before the customer books. */
+export async function previewCoupon(code: string, offeringId: string) {
+  const auth = await getSession();
+  if (!auth) return { ok: false as const, error: "Please sign in again." };
+  const id = z.string().uuid().safeParse(offeringId);
+  if (!id.success) return { ok: false as const, error: "Class not found." };
+  const [o] = await db.select({ price: offering.priceUsdCents }).from(offering).where(eq(offering.id, id.data));
+  if (!o) return { ok: false as const, error: "Class not found." };
+  const c = await evaluateCoupon(db, code.slice(0, 40), auth.user.id, o.price);
+  return c.ok
+    ? { ok: true as const, code: c.code, description: c.description, discountCents: c.discountCents, finalCents: c.finalCents }
+    : c;
 }

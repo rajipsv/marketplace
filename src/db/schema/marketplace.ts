@@ -223,6 +223,23 @@ export const classSession = pgTable(
   ],
 );
 
+/** Discount codes, e.g. the founding-family "first class free" offer. */
+export const coupon = pgTable(
+  "coupon",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    code: text().notNull().unique(), // stored upper-case
+    description: text().notNull(),
+    percentOff: smallint().notNull(), // 1–100
+    maxRedemptions: integer(), // null = unlimited
+    firstBookingOnly: boolean().notNull().default(false),
+    validUntil: timestamp({ withTimezone: true }),
+    isActive: boolean().notNull().default(true),
+    createdAt,
+  },
+  (t) => [check("coupon_percent_range", sql`${t.percentOff} between 1 and 100`)],
+);
+
 export const booking = pgTable(
   "booking",
   {
@@ -235,12 +252,14 @@ export const booking = pgTable(
       .references(() => user.id, { onDelete: "restrict" }),
     familyMemberId: uuid().references(() => familyMember.id, { onDelete: "set null" }),
     status: bookingStatus().notNull().default("pending_payment"),
-    priceUsdCents: integer().notNull(),
+    priceUsdCents: integer().notNull(), // amount payable after any discount
+    discountUsdCents: integer().notNull().default(0),
+    couponId: uuid().references(() => coupon.id, { onDelete: "set null" }),
     cancelledAt: timestamp({ withTimezone: true }),
     createdAt,
     updatedAt,
   },
-  (t) => [index().on(t.customerUserId), index().on(t.sessionId)],
+  (t) => [index().on(t.customerUserId), index().on(t.sessionId), index().on(t.couponId)],
 );
 
 export const payment = pgTable(

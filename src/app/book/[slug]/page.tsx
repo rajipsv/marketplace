@@ -7,12 +7,19 @@ import { db } from "@/db";
 import { coach, familyMember, offering } from "@/db/schema";
 import { requireUser } from "@/lib/authz";
 import { openSlots, sessionsWithSeats } from "@/lib/slots";
-import { createBooking } from "../actions";
+import { createBooking, previewCoupon } from "../actions";
 
 export const metadata: Metadata = { title: "Book a class" };
 
-export default async function BookPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BookPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ code?: string }>;
+}) {
   const { slug } = await params;
+  const { code } = await searchParams;
   const user = await requireUser(`/book/${slug}`);
 
   const [o] = await db
@@ -61,6 +68,8 @@ export default async function BookPage({ params }: { params: Promise<{ slug: str
           slots={slots}
           sessions={sessions}
           requestHref={`/request?class=${o.slug}`}
+          preview={previewCoupon}
+          initialCode={code?.slice(0, 40)}
         />
       </div>
     </div>

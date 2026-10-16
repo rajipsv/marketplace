@@ -6,15 +6,14 @@ const company = [
   { label: "About us", href: "/about" },
   { label: "Request a class", href: "/request" },
   { label: "Teach with us", href: "/teach" },
-  { label: "Trust & safety", href: "/trust" },
-  { label: "Help & FAQ", href: "/help" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact us", href: "/contact" },
 ];
 
 const legal = [
   { label: "Terms of service", href: "/terms" },
   { label: "Privacy policy", href: "/privacy" },
   { label: "Cancellation & refunds", href: "/refunds" },
+  { label: "Service delivery", href: "/delivery" },
   { label: "Disclaimer", href: "/disclaimer" },
 ];
 
@@ -35,7 +34,7 @@ export async function Footer() {
         <p className="mx-auto max-w-6xl px-4 py-6 text-xs leading-relaxed text-muted">
           Sessions are for learning, cultural, spiritual and wellness purposes. They are not medical,
           psychological, legal or financial advice. Astrology and related readings are offered for
-          spiritual guidance. © {new Date().getFullYear()} {siteConfig.name}.
+          spiritual guidance. © {new Date().getFullYear()} {siteConfig.name} · Operated by {siteConfig.legal.businessName}.
         </p>
       </div>
     </footer>

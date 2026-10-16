@@ -8,6 +8,9 @@ import type { FormState } from "@/lib/validation";
 import { cn, formatUsd } from "@/lib/utils";
 
 type Session = { id: string; startsAt: string; seatsLeft: number };
+type CouponPreview =
+  | { ok: true; code: string; description: string; discountCents: number; finalCents: number }
+  | { ok: false; error: string };
 
 export function BookingForm({
   action,
@@ -18,6 +21,8 @@ export function BookingForm({
   slots,
   sessions,
   requestHref,
+  preview,
+  initialCode,
 }: {
   action: (prev: FormState, fd: FormData) => Promise<FormState>;
   offeringId: string;
@@ -27,6 +32,8 @@ export function BookingForm({
   slots?: string[]; // 1-on-1 start times (UTC ISO)
   sessions?: Session[]; // group / weekly dates
   requestHref: string;
+  preview: (code: string, offeringId: string) => Promise<CouponPreview>;
+  initialCode?: string;
 }) {
   const [state, formAction] = useActionState(action, {});
   const [tz, setTz] = useState(DEFAULT_US_TZ);
@@ -53,6 +60,21 @@ export function BookingForm({
   const activeDay = day ?? days[0]?.[0] ?? null;
   const [pick, setPick] = useState<string | null>(null);
 
+  const [codeInput, setCodeInput] = useState(initialCode ?? "");
+  const [coupon, setCoupon] = useState<CouponPreview | null>(null);
+  const [checking, setChecking] = useState(false);
+  async function applyCode(code = codeInput) {
+    if (!code.trim()) return;
+    setChecking(true);
+    setCoupon(await preview(code, offeringId));
+    setChecking(false);
+  }
+  useEffect(() => {
+    if (initialCode && priceUsd > 0) void applyCode(initialCode);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const finalUsd = coupon?.ok ? coupon.finalCents / 100 : priceUsd;
+
   const attendeeOptions = [{ id: "self", name: `Me (${selfName})` }, ...members];
   const empty = slots ? slots.length === 0 : (sessions ?? []).length === 0;
   const allFull = !slots && !empty && (sessions ?? []).every((s) => s.seatsLeft === 0);
@@ -62,6 +84,7 @@ export function BookingForm({
       <input type="hidden" name="offeringId" value={offeringId} />
       {slots && <input type="hidden" name="startsAt" value={pick ?? ""} />}
       {sessions && <input type="hidden" name="sessionId" value={pick ?? ""} />}
+      <input type="hidden" name="coupon" value={coupon?.ok ? coupon.code : ""} />
 
       <fieldset>
         <legend className="font-display text-xl font-semibold">1. Who is attending?</legend>
@@ -172,11 +195,53 @@ export function BookingForm({
       </fieldset>
 
       <div className="rounded-2xl border border-border bg-surface p-5">
+        {priceUsd > 0 && (
+          <div className="mb-4 border-b border-border pb-4">
+            <label htmlFor="coupon-code" className="text-sm font-medium">
+              Offer code
+            </label>
+            <div className="mt-1 flex gap-2">
+              <input
+                id="coupon-code"
+                value={codeInput}
+                onChange={(e) => {
+                  setCodeInput(e.target.value);
+                  setCoupon(null);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    void applyCode();
+                  }
+                }}
+                placeholder="e.g. FIRSTCLASS"
+                autoCapitalize="characters"
+                className="min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm uppercase outline-none focus:border-primary"
+              />
+              <button
+                type="button"
+                onClick={() => applyCode()}
+                disabled={checking || !codeInput.trim()}
+                className="cursor-pointer rounded-xl border border-border px-4 text-sm font-semibold hover:bg-surface-muted disabled:opacity-50"
+              >
+                {checking ? "…" : "Apply"}
+              </button>
+            </div>
+            {coupon && (
+              <p role="status" className={cn("mt-1 text-xs", coupon.ok ? "text-success" : "text-kumkum")}>
+                {coupon.ok ? `✓ ${coupon.description}` : coupon.error}
+              </p>
+            )}
+          </div>
+        )}
         <p className="flex items-baseline justify-between">
           <span className="text-muted">Price</span>
-          <span className="text-2xl font-semibold">{formatUsd(priceUsd)}</span>
+          <span className="text-2xl font-semibold">
+            {coupon?.ok && <span className="mr-2 text-base font-normal text-muted line-through">{formatUsd(priceUsd)}</span>}
+            {formatUsd(finalUsd)}
+          </span>
         </p>
-        {priceUsd > 0 && (
+        {finalUsd > 0 && (
           <p className="mt-2 text-sm text-muted">
             Online payment is opening soon. We&apos;ll reserve your spot now and send you a payment link before the class.
           </p>
@@ -186,7 +251,7 @@ export function BookingForm({
         </div>
         <div className="mt-3">
           {pick ? (
-            <SubmitButton className="w-full py-3">{priceUsd > 0 ? "Reserve my spot" : "Confirm booking"}</SubmitButton>
+            <SubmitButton className="w-full py-3">{finalUsd > 0 ? "Reserve my spot" : "Confirm booking"}</SubmitButton>
           ) : (
             <button type="button" disabled className="w-full rounded-full bg-primary/50 px-5 py-3 text-sm font-semibold text-primary-foreground">
               Choose a {slots ? "time" : "date"} to continue
