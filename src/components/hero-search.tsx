@@ -11,7 +11,7 @@ const audiences = [
   { value: "family", label: "For family" },
 ] as const;
 
-const popular = ["Bharatanatyam", "Kundli reading", "Telugu for kids", "Prenatal yoga", "Diwali puja"];
+const popular = ["Chess", "Maths", "Dance"];
 
 export function HeroSearch() {
   const router = useRouter();
@@ -62,7 +62,7 @@ export function HeroSearch() {
           id="hero-q"
           value={q}
           onChange={(e) => setQ(e.target.value)}
-          placeholder="Try “Carnatic vocal”, “Vedic astrology”, “yoga in Tamil”"
+          placeholder="Try “chess”, “maths” or “dance”"
           className="min-w-0 flex-1 bg-transparent py-2 text-base outline-none placeholder:text-muted"
         />
         <button

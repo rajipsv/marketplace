@@ -1,5 +1,6 @@
 // Loads the sample catalogue into the database. Safe to re-run: existing rows
-// (matched by email / slug / coach+start time) are left untouched.
+// are matched by email / slug / coach+start time; only coach bios and offering
+// descriptions are refreshed.
 //   npm run db:seed
 import "dotenv/config";
 import { randomUUID } from "node:crypto";
@@ -7,7 +8,7 @@ import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import * as schema from "./schema";
-import { categories, coaches, offerings } from "./seed-data";
+import { categories, coachBios, coaches, offeringDescriptions, offerings } from "./seed-data";
 
 const client = postgres(process.env.DATABASE_URL!, { prepare: false, max: 1 });
 const db = drizzle(client, { schema, casing: "snake_case" });
@@ -46,8 +47,9 @@ async function main() {
         yearsExperience: c.yearsExperience,
         verified: c.verified,
         status: "approved",
+        bio: coachBios[c.slug] ?? null,
       })
-      .onConflictDoNothing();
+      .onConflictDoUpdate({ target: schema.coach.slug, set: { bio: coachBios[c.slug] ?? null } });
     const [row] = await db.select({ id: schema.coach.id }).from(schema.coach).where(eq(schema.coach.slug, c.slug));
     coachIds.set(c.slug, row.id);
 
@@ -75,8 +77,9 @@ async function main() {
         capacity: o.format === "one-on-one" ? 1 : 12,
         languages: o.languages,
         badge: o.badge ?? null,
+        description: offeringDescriptions[o.id] ?? null,
       })
-      .onConflictDoNothing();
+      .onConflictDoUpdate({ target: schema.offering.slug, set: { description: offeringDescriptions[o.id] ?? null } });
     const [row] = await db
       .select({ id: schema.offering.id, capacity: schema.offering.capacity })
       .from(schema.offering)

@@ -1,32 +1,23 @@
 import Link from "next/link";
-import {
-  BadgeCheck,
-  CalendarClock,
-  CreditCard,
-  Languages,
-  ShieldCheck,
-  UserPlus,
-  Video,
-} from "lucide-react";
+import { CalendarClock, CreditCard, Laptop, UserPlus, Video } from "lucide-react";
 import { CategoryTile } from "@/components/category-tile";
 import { CoachCard } from "@/components/coach-card";
 import { HeroSearch } from "@/components/hero-search";
 import { SessionCard } from "@/components/session-card";
-import { festivals, languages } from "@/lib/content";
 import { getCategories, getFeaturedCoaches, getOfferingCards } from "@/lib/queries";
 
 // Re-fetch catalogue data at most once a minute.
 export const revalidate = 60;
 
 const trust = [
-  { icon: BadgeCheck, title: "Verified teachers", text: "ID, credentials and a live interview" },
-  { icon: CalendarClock, title: "US-friendly times", text: "Evenings and weekends, in your time zone" },
-  { icon: Languages, title: "Your language", text: "Hindi, Tamil, Telugu and 7 more" },
+  { icon: Video, title: "Live 1-on-1 classes", text: "Real teachers in India, not recordings" },
+  { icon: CalendarClock, title: "US-friendly times", text: "Shown in your time zone, with IST for reference" },
+  { icon: Laptop, title: "In your browser", text: "No app or download needed" },
   { icon: CreditCard, title: "Pay in USD", text: "Free to join. Pay only when you book" },
 ];
 
 const steps = [
-  { icon: UserPlus, title: "Join free", text: "Create a family account and add your kids' profiles." },
+  { icon: UserPlus, title: "Join free", text: "Create your free account in under a minute." },
   { icon: CalendarClock, title: "Pick a time", text: "Every slot is shown in your time zone, with IST for reference." },
   { icon: Video, title: "Join live", text: "Classes run in your browser. No app or download needed." },
 ];
@@ -38,7 +29,7 @@ export default async function Home() {
     getOfferingCards(),
   ]);
   const kids = offerings.filter((o) => o.audience === "kids").slice(0, 2);
-  const upcoming = offerings.filter((o) => o.audience !== "kids").slice(0, 4);
+  const popular = offerings.slice(0, 4);
 
   return (
     <>
@@ -54,8 +45,8 @@ export default async function Home() {
             <span className="text-primary">live in your time zone.</span>
           </h1>
           <p className="max-w-2xl text-lg text-muted">
-            Bharatanatyam for your daughter, a kundli reading for you, yoga for your parents. Book
-            1-on-1 and group classes with verified gurus and coaches in India.
+            Chess, maths, dance and more. Book live 1-on-1 classes with teachers in India, at
+            times that suit US families.
           </p>
           <HeroSearch />
         </div>
@@ -86,6 +77,7 @@ export default async function Home() {
       </Section>
 
       {/* Kids spotlight */}
+      {kids.length > 0 && (
       <section className="mx-auto mt-20 max-w-6xl px-4">
         <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-10 text-primary-foreground sm:px-10">
           <div className="bg-rangoli absolute inset-0 opacity-25" aria-hidden />
@@ -93,14 +85,14 @@ export default async function Home() {
             <div>
               <h2 className="font-display text-3xl font-semibold">Keep your kids close to their roots</h2>
               <p className="mt-3 text-primary-foreground/85">
-                Weekly dance, music, shloka and mother-tongue classes on Saturday and Sunday
-                mornings. The first class is free. Parents manage everything from one account.
+                Live classes for children, scheduled around the US school week. Parents book and
+                manage everything from one account.
               </p>
               <Link
                 href="/explore?for=kids"
                 className="mt-6 inline-block rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:bg-accent-strong"
               >
-                Book a free trial
+                See kids&apos; classes
               </Link>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
@@ -113,41 +105,17 @@ export default async function Home() {
           </div>
         </div>
       </section>
+      )}
 
-      {/* Upcoming */}
-      <Section title="Coming up live" href="/explore" linkLabel="See all sessions">
+      {/* Popular */}
+      <Section title="Popular classes" href="/explore" linkLabel="See all classes">
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {upcoming.map((o) => (
+          {popular.map((o) => (
             <SessionCard key={o.id} offering={o} />
           ))}
         </div>
       </Section>
 
-      {/* Festivals */}
-      <Section title="Celebrate together, from anywhere" href="/explore?collection=festivals" linkLabel="Festival calendar">
-        <div className="grid gap-4 sm:grid-cols-2">
-          {festivals.map((f) => (
-            <Link
-              key={f.name}
-              href={`/explore?collection=${encodeURIComponent(f.name.toLowerCase())}`}
-              className="flex items-center gap-5 rounded-2xl border border-border bg-surface p-5 transition hover:border-kumkum"
-            >
-              <span className="flex size-16 shrink-0 flex-col items-center justify-center rounded-xl bg-kumkum/10 text-kumkum">
-                <span className="text-xs font-semibold uppercase">
-                  {new Date(`${f.date}T12:00:00Z`).toLocaleString("en-US", { month: "short", timeZone: "UTC" })}
-                </span>
-                <span className="font-display text-2xl font-semibold">
-                  {new Date(`${f.date}T12:00:00Z`).getUTCDate()}
-                </span>
-              </span>
-              <span>
-                <span className="block font-display text-lg font-semibold">{f.name}</span>
-                <span className="block text-sm text-muted">{f.blurb}</span>
-              </span>
-            </Link>
-          ))}
-        </div>
-      </Section>
 
       {/* Coaches */}
       <Section title="Meet some of our teachers" href="/coaches" linkLabel="All teachers">
@@ -170,27 +138,8 @@ export default async function Home() {
             </li>
           ))}
         </ol>
-        <p className="mt-6 flex items-center gap-2 text-sm text-muted">
-          <ShieldCheck className="size-4 text-success" aria-hidden />
-          Kids&apos; classes are recorded, and teachers never message children directly.
-        </p>
       </Section>
 
-      {/* Languages */}
-      <Section title="Learn in the language you speak at home">
-        <ul className="flex flex-wrap gap-2">
-          {languages.map((l) => (
-            <li key={l}>
-              <Link
-                href={`/explore?language=${l.toLowerCase()}`}
-                className="inline-block rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium hover:border-primary hover:text-primary"
-              >
-                {l}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Section>
 
       {/* Teach CTA */}
       <section className="mx-auto mt-20 max-w-6xl px-4">

@@ -3,7 +3,7 @@ import { BadgeCheck, Clock, Languages, Users, Video } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { LocalTime } from "@/components/local-time";
 import type { Badge, Format, OfferingCard } from "@/lib/types";
-import { cn, formatUsd } from "@/lib/utils";
+import { cn, coachLocation, formatUsd } from "@/lib/utils";
 
 const formatLabel: Record<Format, string> = {
   group: "Live group",
@@ -52,7 +52,7 @@ export function SessionCard({ offering }: { offering: OfferingCard }) {
             {coach.name}
             {coach.verified && <BadgeCheck className="size-4 text-accent" aria-label="Verified" />}
           </p>
-          <p className="text-xs text-white/80">{coach.city}, India</p>
+          <p className="text-xs text-white/80">{coachLocation(coach.city)}</p>
         </div>
       </div>
 
