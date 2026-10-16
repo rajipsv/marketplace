@@ -50,6 +50,11 @@ _Last updated: 2026-10-16_
 
 ## ⏳ Waiting on owner
 
+- [ ] **Company structure:** Indian Pvt Ltd with parents as directors (one resident director) who operate the business; confirm owner's permitted role with an immigration attorney (H-1B) and US/Indian tax filings with a cross-border CA
+- [ ] Parents sign up on the site with their own emails → `npm run make-admin -- <email>`; decide whether to keep or downgrade the current admin account
+- [ ] Razorpay / RazorpayX / bank in the company's name, operated by parents
+- [ ] Over time, move Vercel, Neon, Cloudflare, GitHub and domain to company/parent-owned accounts
+
 - [ ] **Founding teachers — confirm details:** Sharan (chess, $10, Hyderabad), Bhramaramba (maths, $5), Sai (dance, $10). Needed: city (Bhramaramba, Sai), teaching languages, 1-on-1 or group, class length, kids/adults, short bio, years of experience, photo. Currently defaulted to 1-on-1 · 60 min · English; no bios; not marked verified.
 
 - [ ] Replace `BETTER_AUTH_SECRET` in Vercel (current one was shared in chat) and redeploy
