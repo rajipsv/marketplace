@@ -12,7 +12,11 @@ import { CategoryTile } from "@/components/category-tile";
 import { CoachCard } from "@/components/coach-card";
 import { HeroSearch } from "@/components/hero-search";
 import { SessionCard } from "@/components/session-card";
-import { categories, coaches, festivals, languages, offerings } from "@/lib/data";
+import { festivals, languages } from "@/lib/content";
+import { getCategories, getFeaturedCoaches, getOfferingCards } from "@/lib/queries";
+
+// Re-fetch catalogue data at most once a minute.
+export const revalidate = 60;
 
 const trust = [
   { icon: BadgeCheck, title: "Verified teachers", text: "ID, credentials and a live interview" },
@@ -27,8 +31,13 @@ const steps = [
   { icon: Video, title: "Join live", text: "Classes run in your browser. No app or download needed." },
 ];
 
-export default function Home() {
-  const kids = offerings.filter((o) => o.audience === "kids");
+export default async function Home() {
+  const [categories, coaches, offerings] = await Promise.all([
+    getCategories(),
+    getFeaturedCoaches(),
+    getOfferingCards(),
+  ]);
+  const kids = offerings.filter((o) => o.audience === "kids").slice(0, 2);
   const upcoming = offerings.filter((o) => o.audience !== "kids").slice(0, 4);
 
   return (

@@ -2,29 +2,28 @@ import Link from "next/link";
 import { BadgeCheck, Clock, Languages, Users, Video } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { LocalTime } from "@/components/local-time";
-import { coachBySlug, type Offering } from "@/lib/data";
+import type { Badge, Format, OfferingCard } from "@/lib/types";
 import { cn, formatUsd } from "@/lib/utils";
 
-const formatLabel: Record<Offering["format"], string> = {
+const formatLabel: Record<Format, string> = {
   group: "Live group",
   "one-on-one": "1-on-1 video",
   "weekly-class": "Weekly class",
 };
 
-const badgeStyle: Record<NonNullable<Offering["badge"]>, string> = {
+const badgeStyle: Record<Badge, string> = {
   "Most loved": "bg-primary text-primary-foreground",
   "Free trial": "bg-success text-white",
   Festival: "bg-kumkum text-white",
   New: "bg-accent text-accent-foreground",
 };
 
-export function SessionCard({ offering }: { offering: Offering }) {
-  const coach = coachBySlug(offering.coachSlug);
-  if (!coach) return null;
+export function SessionCard({ offering }: { offering: OfferingCard }) {
+  const { coach } = offering;
 
   return (
     <Link
-      href={`/sessions/${offering.id}`}
+      href={`/sessions/${offering.slug}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-primary"
     >
       <div className="relative aspect-[4/3]">

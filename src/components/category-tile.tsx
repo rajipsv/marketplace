@@ -9,7 +9,7 @@ import {
   Sparkles,
   type LucideIcon,
 } from "lucide-react";
-import type { Category } from "@/lib/data";
+import type { Category } from "@/lib/types";
 
 const icons: Record<string, LucideIcon> = {
   Activity,

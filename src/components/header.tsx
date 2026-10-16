@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { HeaderAuth } from "@/components/auth/header-auth";
 import { siteConfig } from "@/config/site";
 
 export function Header() {
@@ -30,15 +31,7 @@ export function Header() {
           >
             Teach with us
           </Link>
-          <Link href="/login" className="rounded-full px-3 py-2 text-sm font-medium hover:bg-surface-muted">
-            Sign in
-          </Link>
-          <Link
-            href="/signup"
-            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary-strong"
-          >
-            Join free
-          </Link>
+          <HeaderAuth />
         </div>
       </div>
     </header>

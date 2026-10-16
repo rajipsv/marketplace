@@ -1,10 +1,11 @@
-// SAMPLE DATA for UI development only — replaced by Supabase queries later.
-// Coach names are fictional. Times are stored in UTC (ISO 8601).
+// Sample catalogue loaded by `npm run db:seed` for development and demos.
+// Coach names are fictional and their accounts cannot sign in.
+// Times are UTC (ISO 8601); prices are whole US dollars here, stored as cents.
 
-export type Audience = "adults" | "kids" | "family";
-export type Format = "group" | "one-on-one" | "weekly-class";
+type Format = "group" | "one-on-one" | "weekly-class";
+type Audience = "adults" | "kids" | "family";
 
-export type Category = {
+type SeedCategory = {
   slug: string;
   name: string;
   blurb: string;
@@ -12,7 +13,7 @@ export type Category = {
   examples: string[];
 };
 
-export type Coach = {
+type SeedCoach = {
   slug: string;
   name: string;
   title: string;
@@ -23,21 +24,21 @@ export type Coach = {
   verified: boolean;
 };
 
-export type Offering = {
-  id: string;
+type SeedOffering = {
+  id: string; // stable seed key only
   title: string;
   coachSlug: string;
   category: string;
   format: Format;
   audience: Audience;
-  startsAt?: string; // group sessions; 1-on-1 uses the coach's availability
+  startsAt?: string; // first scheduled session for group / weekly classes
   durationMin: number;
   priceUsd: number;
   languages: string[];
   badge?: "Most loved" | "Free trial" | "Festival" | "New";
 };
 
-export const categories: Category[] = [
+export const categories: SeedCategory[] = [
   {
     slug: "kids-culture",
     name: "Kids & Culture",
@@ -89,7 +90,7 @@ export const categories: Category[] = [
   },
 ];
 
-export const coaches: Coach[] = [
+export const coaches: SeedCoach[] = [
   {
     slug: "lakshmi-raghavan",
     name: "Lakshmi Raghavan",
@@ -152,7 +153,7 @@ export const coaches: Coach[] = [
   },
 ];
 
-export const offerings: Offering[] = [
+export const offerings: SeedOffering[] = [
   {
     id: "o1",
     title: "Bharatanatyam for Beginners (Ages 6–10)",
@@ -252,37 +253,3 @@ export const offerings: Offering[] = [
     languages: ["Hindi", "English"],
   },
 ];
-
-export const festivals = [
-  {
-    name: "Diwali",
-    date: "2026-11-08",
-    blurb: "Lakshmi puja, rangoli workshops for kids, festive cooking",
-  },
-  {
-    name: "Thanksgiving weekend",
-    date: "2026-11-26",
-    blurb: "Family yoga, gratitude meditation, kids' storytelling",
-  },
-];
-
-export const languages = [
-  "Hindi",
-  "Tamil",
-  "Telugu",
-  "Kannada",
-  "Malayalam",
-  "Marathi",
-  "Gujarati",
-  "Bengali",
-  "Punjabi",
-  "English",
-];
-
-export function coachBySlug(slug: string) {
-  return coaches.find((c) => c.slug === slug);
-}
-
-export function categoryBySlug(slug: string) {
-  return categories.find((c) => c.slug === slug);
-}

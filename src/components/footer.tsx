@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { categories } from "@/lib/data";
+import { getCategories } from "@/lib/queries";
 
 const company = [
   { label: "About us", href: "/about" },
@@ -17,7 +17,8 @@ const legal = [
   { label: "Disclaimer", href: "/disclaimer" },
 ];
 
-export function Footer() {
+export async function Footer() {
+  const categories = await getCategories();
   return (
     <footer className="mt-24 border-t border-border bg-surface-muted">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:grid-cols-2 lg:grid-cols-4">

@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
 import { Avatar } from "@/components/avatar";
-import type { Coach } from "@/lib/data";
+import type { CoachSummary } from "@/lib/types";
 
-export function CoachCard({ coach }: { coach: Coach }) {
+export function CoachCard({ coach }: { coach: CoachSummary }) {
   return (
     <Link
       href={`/coaches/${coach.slug}`}
