@@ -72,11 +72,15 @@ _Last updated: 2026-10-16_
 - [x] 404 page, page metadata, mobile header navigation
 - [ ] Festival collections (when festival classes are listed)
 
-### Phase 3 — Teacher supply
-- [ ] "Teach with us" landing `/teach` + application form (profile, categories, languages, photo, intro video, credential documents → R2)
-- [ ] Admin: coach review queue (view private documents via signed links), approve / reject
-- [ ] Coach dashboard: profile edit, weekly availability (IST), exceptions, create/edit offerings and prices
-- [ ] Role-based route protection (customer / coach / admin)
+### Phase 3 — Teacher supply ✅
+- [x] `/teach` landing + `/teach/apply` application (profile, categories, languages, photo, intro video, up to 3 credentials with private documents → R2)
+- [x] Admin `/admin`: overview, teacher queue by status, review page (private documents via 10-minute signed links), approve / reject / suspend, Verified badge, per-credential verification
+- [x] Teacher dashboard `/coach`: setup checklist, profile edit, weekly hours (IST), classes (1-on-1 / group / weekly), session dates with weekly repeat + overlap check, cancel
+- [x] Role-based protection on pages and server actions; `/media` serves public photos via signed redirects (bucket stays private)
+- [x] `npm run make-admin -- <email>`
+- [x] Verified end-to-end on the live site with a real browser (19 checks), test data removed
+- [ ] Founding teachers (Sharan, Bhramaramba, Sai) to sign up with their own email and apply; then approve them and retire the placeholder profiles
+- [ ] Email notifications for application received / approved (needs Resend — Phase 4)
 
 ### Phase 4 — Booking & payments
 - [ ] Family profiles (parent adds children)
