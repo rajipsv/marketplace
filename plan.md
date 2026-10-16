@@ -40,6 +40,7 @@ _Last updated: 2026-10-16_
 - [x] Next.js scaffold, design tokens (saffron / peacock / ivory, light + dark), Fraunces + Inter
 - [x] Home page: search hero, trust strip, categories, kids spotlight, upcoming sessions (viewer time zone + IST), festivals, teachers, how it works, languages, teach CTA
 - [x] Neon database: 17-table schema, initial migration, idempotent seed (`npm run db:seed`)
+- [x] Fictional sample teachers removed; catalogue = 3 real founding teachers
 - [x] Home page + footer read from the database (60 s revalidate)
 - [x] Better Auth: sign-up, sign-in, account page, header session state; role not user-settable
 - [x] Cloudflare R2: presigned upload API (`/api/uploads`) with type/size limits; CORS for the Vercel URL; verified
@@ -47,6 +48,8 @@ _Last updated: 2026-10-16_
 - [x] Usage guard (90%) and 10-minute auto-commit configured
 
 ## ⏳ Waiting on owner
+
+- [ ] **Founding teachers — confirm details:** Sharan (chess, $10, Hyderabad), Bhramaramba (maths, $5), Sai (dance, $10). Needed: city (Bhramaramba, Sai), teaching languages, 1-on-1 or group, class length, kids/adults, short bio, years of experience, photo. Currently defaulted to 1-on-1 · 60 min · English; no bios; not marked verified.
 
 - [ ] Replace `BETTER_AUTH_SECRET` in Vercel (current one was shared in chat) and redeploy
 - [ ] Final brand name + domain (then update `siteConfig`, Vercel domain, R2 CORS, `BETTER_AUTH_URL`)
@@ -60,13 +63,13 @@ _Last updated: 2026-10-16_
 
 ## 🔨 Pending — build order
 
-### Phase 2 — Browse (no new keys needed) ← **in progress**
-- [ ] Explore page `/explore`: filters (category, for me / my child / family, language, format, price), search, URL-driven
-- [ ] Session detail `/sessions/[slug]`: hero, info strip (duration · format · languages), what's included, upcoming dates in viewer time zone + IST, coach card, FAQ, sticky price/booking bar
-- [ ] Coach profile `/coaches/[slug]`: bio, credentials, languages, experience, offerings, upcoming sessions
-- [ ] Coaches directory `/coaches`
-- [ ] Category pages (via `/explore?category=`) and festival collections
-- [ ] 404 / error pages, page metadata
+### Phase 2 — Browse ✅ (festival collections deferred until festival classes exist)
+- [x] Explore page `/explore`: search + filters (category, for me / my child / family, language, format, price), URL-driven
+- [x] Session detail `/sessions/[slug]`: info strip, about, what's included, upcoming dates (viewer time zone + IST), teacher card, FAQ, booking card + mobile sticky bar ("opening soon" until Phase 4)
+- [x] Coach profile `/coaches/[slug]` and directory `/coaches` (category + language filters)
+- [x] Category pages via `/explore?category=`
+- [x] 404 page, page metadata, mobile header navigation
+- [ ] Festival collections (when festival classes are listed)
 
 ### Phase 3 — Teacher supply
 - [ ] "Teach with us" landing `/teach` + application form (profile, categories, languages, photo, intro video, credential documents → R2)
@@ -107,6 +110,11 @@ _Last updated: 2026-10-16_
 - [ ] Backups, staging environment (Neon branch + Vercel preview)
 - [ ] Real coach photos and content; remove seed data from production
 
+### Mobile
+- [x] Responsive web (phone-first layouts, mobile nav, sticky booking bar)
+- [ ] PWA: installable "Add to Home Screen", app icon, offline fallback page, web push reminders
+- [ ] Native app (later, only if needed): Expo / React Native reusing the same backend (Neon, Better Auth, R2, APIs) and shared TypeScript types/validation
+
 ### Later
 - [ ] Free practice video library (SEO + trust)
-- [ ] Referral program, corporate wellness, mobile app (Expo)
+- [ ] Referral program, corporate wellness
