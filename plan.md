@@ -41,6 +41,7 @@ _Last updated: 2026-10-16_
 - [x] Home page: search hero, trust strip, categories, kids spotlight, upcoming sessions (viewer time zone + IST), festivals, teachers, how it works, languages, teach CTA
 - [x] Neon database: 17-table schema, initial migration, idempotent seed (`npm run db:seed`)
 - [x] Fictional sample teachers removed; catalogue = 3 real founding teachers
+- [x] Owner admin account (gen.rajeswari@gmail.com); auth trusts all of this project's Vercel URLs
 - [x] Home page + footer read from the database (60 s revalidate)
 - [x] Better Auth: sign-up, sign-in, account page, header session state; role not user-settable
 - [x] Cloudflare R2: presigned upload API (`/api/uploads`) with type/size limits; CORS for the Vercel URL; verified
