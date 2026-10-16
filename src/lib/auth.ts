@@ -16,7 +16,23 @@ const google =
       }
     : undefined;
 
+// Origins allowed to call the auth API. Besides BETTER_AUTH_URL, trust this
+// project's own Vercel URLs (production alias, branch and per-deployment), which
+// Vercel exposes as system environment variables without the scheme.
+const vercelHosts = [
+  process.env.VERCEL_PROJECT_PRODUCTION_URL,
+  process.env.VERCEL_BRANCH_URL,
+  process.env.VERCEL_URL,
+].filter(Boolean) as string[];
+
+const trustedOrigins = [
+  process.env.BETTER_AUTH_URL,
+  process.env.NEXT_PUBLIC_SITE_URL,
+  ...vercelHosts.map((host) => `https://${host}`),
+].filter(Boolean) as string[];
+
 export const auth = betterAuth({
+  trustedOrigins,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
