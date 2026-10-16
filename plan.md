@@ -87,13 +87,19 @@ _Last updated: 2026-10-16_
 - [ ] Founding teachers (Sharan, Bhramaramba, Sai) to sign up with their own email and apply; then approve them and retire the placeholder profiles
 - [ ] Email notifications for application received / approved (needs Resend — Phase 4)
 
-### Phase 4 — Booking & payments
-- [ ] Family profiles (parent adds children)
-- [ ] 1-on-1 slot picker (availability → slots in viewer time zone, buffers, no double-booking)
-- [ ] Group / weekly class booking with capacity checks
+### Phase 4a — Customer side (no payment) ✅
+- [x] Family profiles `/account/family` (parent adds children)
+- [x] Booking `/book/[slug]`: who attends; 1-on-1 slot picker from weekly hours (viewer time zone + IST, 12 h notice, 21-day window); group/weekly dates with seats left
+- [x] No double-booking (row locks per teacher / per session); free classes confirm, paid ones are "reserved" until payments go live
+- [x] My Sessions `/my-sessions`: upcoming / past, cancel up to 24 h before
+- [x] Teacher Bookings + Admin Bookings views
+- [x] Demand capture: `/request` (request a time / a class) → Admin → Requests
+- [x] Go-to-market plan: `docs/go-to-market.md`
+
+### Phase 4b — Payments & live classes
 - [ ] Checkout: Razorpay USD orders, webhook (signature, idempotency), PayPal option
 - [ ] Free trial flow for kids' classes
-- [ ] My Sessions: upcoming / past, join, cancel / reschedule with policy, receipts
+- [ ] My Sessions: join link, reschedule, receipts
 - [ ] 100ms video rooms, join tokens, recording (always for kids' classes)
 - [ ] Emails (Resend): verification, password reset, booking confirmation + calendar invite, 24 h / 1 h reminders
 - [ ] Background jobs (Inngest / Vercel Cron): reminders, session completion, no-shows

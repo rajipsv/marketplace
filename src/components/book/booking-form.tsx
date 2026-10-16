@@ -54,7 +54,8 @@ export function BookingForm({
   const [pick, setPick] = useState<string | null>(null);
 
   const attendeeOptions = [{ id: "self", name: `Me (${selfName})` }, ...members];
-  const empty = slots ? slots.length === 0 : (sessions ?? []).every((s) => s.seatsLeft === 0);
+  const empty = slots ? slots.length === 0 : (sessions ?? []).length === 0;
+  const allFull = !slots && !empty && (sessions ?? []).every((s) => s.seatsLeft === 0);
 
   return (
     <form action={formAction} className="space-y-8">
@@ -159,6 +160,14 @@ export function BookingForm({
               </li>
             ))}
           </ul>
+        )}
+        {allFull && (
+          <p className="mt-3 text-sm text-muted">
+            All dates are full.{" "}
+            <Link href={requestHref} className="font-semibold text-primary hover:underline">
+              Request another date
+            </Link>
+          </p>
         )}
       </fieldset>
 
