@@ -2,7 +2,7 @@ import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import type { CoachSummary } from "@/lib/types";
-import { cn, coachFacts } from "@/lib/utils";
+import { cn, coachFacts, mediaUrl } from "@/lib/utils";
 
 export function CoachCard({ coach, className }: { coach: CoachSummary; className?: string }) {
   return (
@@ -13,7 +13,7 @@ export function CoachCard({ coach, className }: { coach: CoachSummary; className
         className,
       )}
     >
-      <Avatar name={coach.name} className="aspect-square w-full text-6xl" />
+      <Avatar name={coach.name} src={mediaUrl(coach.photoKey)} className="aspect-square w-full text-6xl" />
       <div className="flex flex-1 flex-col gap-1 p-4">
         <p className="flex items-center gap-1 font-display text-lg font-semibold group-hover:text-primary">
           {coach.name}

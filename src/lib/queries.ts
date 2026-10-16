@@ -26,6 +26,7 @@ const coachSummary = {
   languages: coach.languages,
   yearsExperience: coach.yearsExperience,
   verified: coach.verified,
+  photoKey: coach.photoKey,
 };
 
 const offeringCardFields = {

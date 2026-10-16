@@ -7,7 +7,7 @@ import { LocalTime } from "@/components/local-time";
 import { BookingCta } from "@/components/sessions/booking-cta";
 import { getOfferingBySlug, type OfferingDetail } from "@/lib/queries";
 import type { Format } from "@/lib/types";
-import { coachFacts, formatUsd } from "@/lib/utils";
+import { coachFacts, formatUsd, mediaUrl } from "@/lib/utils";
 
 export const revalidate = 60;
 
@@ -104,7 +104,7 @@ export default async function SessionPage({ params }: Props) {
           <h1 className="font-display text-3xl leading-tight font-semibold sm:text-4xl">{offering.title}</h1>
 
           <Link href={`/coaches/${coach.slug}`} className="group mt-5 flex items-center gap-3">
-            <Avatar name={coach.name} className="size-12 rounded-full text-lg" />
+            <Avatar name={coach.name} src={mediaUrl(coach.photoKey)} className="size-12 rounded-full text-lg" />
             <span>
               <span className="flex items-center gap-1 font-semibold group-hover:text-primary">
                 {coach.name}

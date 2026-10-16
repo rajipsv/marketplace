@@ -36,3 +36,10 @@ export function coachFacts(c: { city: string; yearsExperience: number; languages
     c.languages.length ? c.languages.join(", ") : null,
   ].filter(Boolean) as string[];
 }
+
+/** URL for a public R2 object key (served via /media unless a public bucket URL is set). */
+export function mediaUrl(key: string | null | undefined) {
+  if (!key) return null;
+  const base = process.env.NEXT_PUBLIC_R2_PUBLIC_URL;
+  return base ? `${base}/${key}` : `/media/${key}`;
+}

@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Award, BadgeCheck, Languages, MapPin, ShieldCheck } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { SessionCard } from "@/components/session-card";
-import { coachLocation } from "@/lib/utils";
+import { coachLocation, mediaUrl } from "@/lib/utils";
 import { getCoachBySlug } from "@/lib/queries";
 
 export const revalidate = 60;
@@ -31,7 +31,7 @@ export default async function CoachPage({ params }: Props) {
       </nav>
 
       <header className="mt-6 grid gap-8 rounded-3xl border border-border bg-surface p-6 sm:p-8 md:grid-cols-[200px_1fr]">
-        <Avatar name={coach.name} className="aspect-square w-40 rounded-2xl text-6xl md:w-full" />
+        <Avatar name={coach.name} src={mediaUrl(coach.photoKey)} className="aspect-square w-40 rounded-2xl text-6xl md:w-full" />
         <div>
           <h1 className="flex flex-wrap items-center gap-2 font-display text-3xl font-semibold sm:text-4xl">
             {coach.name}

@@ -20,6 +20,7 @@ export type CoachSummary = {
   languages: string[];
   yearsExperience: number;
   verified: boolean;
+  photoKey: string | null;
 };
 
 export type OfferingCard = {

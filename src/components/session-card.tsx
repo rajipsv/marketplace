@@ -3,7 +3,7 @@ import { BadgeCheck, Clock, Languages, Users, Video } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { LocalTime } from "@/components/local-time";
 import type { Badge, Format, OfferingCard } from "@/lib/types";
-import { cn, coachLocation, formatUsd } from "@/lib/utils";
+import { cn, coachLocation, formatUsd, mediaUrl } from "@/lib/utils";
 
 const formatLabel: Record<Format, string> = {
   group: "Live group",
@@ -27,7 +27,7 @@ export function SessionCard({ offering }: { offering: OfferingCard }) {
       className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-2 focus-visible:outline-primary"
     >
       <div className="relative aspect-[4/3]">
-        <Avatar name={coach.name} className="absolute inset-0 text-5xl" />
+        <Avatar name={coach.name} src={mediaUrl(coach.photoKey)} className="absolute inset-0 size-full text-5xl" />
         <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 to-transparent" />
         {offering.badge && (
           <span

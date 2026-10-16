@@ -18,11 +18,20 @@ function pick(seed: string) {
 
 export function Avatar({
   name,
+  src,
   className,
 }: {
   name: string;
+  src?: string | null;
   className?: string;
 }) {
+  if (src) {
+    return (
+      // Plain <img>: photos are served via a redirect to signed R2 URLs.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={src} alt="" loading="lazy" className={cn("bg-surface-muted object-cover", className)} />
+    );
+  }
   return (
     <div
       aria-hidden
