@@ -33,3 +33,20 @@ export async function getOwnCoach(userId: string) {
   const [row] = await db.select().from(coach).where(eq(coach.userId, userId));
   return row ?? null;
 }
+
+/** Signed-in user with an approved teacher profile; others go to the application page. */
+export async function requireApprovedCoach(next: string) {
+  const user = await requireUser(next);
+  const own = await getOwnCoach(user.id);
+  if (!own || own.status !== "approved") redirect("/teach/apply");
+  return { user, coach: own };
+}
+
+/** For server actions: the caller's approved coach row, or throws. */
+export async function assertApprovedCoach() {
+  const session = await getSession();
+  if (!session) throw new Error("Not allowed");
+  const own = await getOwnCoach(session.user.id);
+  if (!own || own.status !== "approved") throw new Error("Not allowed");
+  return { user: session.user, coach: own };
+}

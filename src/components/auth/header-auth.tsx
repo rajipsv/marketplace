@@ -10,13 +10,23 @@ export function HeaderAuth() {
   if (isPending) return <span className="h-9 w-32" aria-hidden />;
 
   if (data) {
+    const role = data.user.role;
+    const dash =
+      role === "admin" ? { href: "/admin", label: "Admin" } : role === "coach" ? { href: "/coach", label: "Dashboard" } : null;
     return (
-      <Link
+      <>
+        {dash && (
+          <Link href={dash.href} className="rounded-full px-3 py-2 text-sm font-semibold text-primary hover:bg-surface-muted">
+            {dash.label}
+          </Link>
+        )}
+        <Link
         href="/account"
         className="rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-surface-muted"
       >
         {data.user.name.split(" ")[0]}&apos;s account
       </Link>
+      </>
     );
   }
 
