@@ -21,7 +21,7 @@ export default async function AccountPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-14">
       <h1 className="font-display text-3xl font-semibold">Namaste, {user.name.split(" ")[0]}</h1>
-      <p className="mt-2 text-muted">Your bookings and family profiles will appear here.</p>
+      <p className="mt-2 text-muted">Manage your bookings and your family&apos;s profiles.</p>
 
       <dl className="mt-8 divide-y divide-border rounded-2xl border border-border bg-surface">
         {rows.map(([label, value]) => (
@@ -33,6 +33,8 @@ export default async function AccountPage() {
       </dl>
 
       <div className="mt-8 flex flex-wrap gap-3">
+        <DashLink href="/my-sessions">My sessions</DashLink>
+        <DashLink href="/account/family">My family</DashLink>
         {user.role === "admin" && <DashLink href="/admin">Open admin</DashLink>}
         {(user.role === "coach" || user.role === "admin") && <DashLink href="/coach">Teacher dashboard</DashLink>}
         {user.role === "customer" && <DashLink href="/teach">Teach with us</DashLink>}

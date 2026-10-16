@@ -303,3 +303,25 @@ export const review = pgTable(
   },
   (t) => [index().on(t.coachId), check("review_rating_range", sql`${t.rating} between 1 and 5`)],
 );
+
+export const requestStatus = pgEnum("request_status", ["new", "contacted", "closed"]);
+
+/** Demand capture: a family asks for a time or a class we don't list yet. */
+export const classRequest = pgTable(
+  "class_request",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    userId: text().references(() => user.id, { onDelete: "set null" }),
+    name: text().notNull(),
+    email: text().notNull(),
+    offeringId: uuid().references(() => offering.id, { onDelete: "set null" }),
+    subject: text(), // what they want to learn, when no specific class
+    forWhom: text(), // "me", "child (8)", …
+    preferredTimes: text(),
+    message: text(),
+    timezone: text(),
+    status: requestStatus().notNull().default("new"),
+    createdAt,
+  },
+  (t) => [index().on(t.status, t.createdAt)],
+);

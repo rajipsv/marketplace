@@ -8,6 +8,7 @@ const nav = [
   { href: "/coach/profile", label: "Profile" },
   { href: "/coach/availability", label: "Weekly hours" },
   { href: "/coach/classes", label: "Classes" },
+  { href: "/coach/bookings", label: "Bookings" },
 ];
 
 export default async function CoachLayout({ children }: { children: React.ReactNode }) {

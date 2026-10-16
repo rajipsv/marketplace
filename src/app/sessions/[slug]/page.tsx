@@ -53,7 +53,7 @@ const faqs = (o: OfferingDetail) => [
   },
   {
     q: "How do I join?",
-    a: "After booking, a Join button appears in My Sessions a few minutes before the start. Classes run in your web browser — no app needed.",
+    a: "Your booking appears in My Sessions, and the join link is shown there before the class. Classes run in your web browser — no app needed.",
   },
   {
     q: o.audience === "kids" ? "Does a parent need to be present?" : "Is this suitable for beginners?",
@@ -64,7 +64,7 @@ const faqs = (o: OfferingDetail) => [
   },
   {
     q: "What if I need to cancel?",
-    a: "Cancellation and refund terms are shown clearly before you pay.",
+    a: "You can cancel from My Sessions up to 24 hours before the class starts.",
   },
 ];
 

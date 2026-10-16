@@ -141,6 +141,25 @@ export default async function Home() {
       </Section>
 
 
+      {/* Demand capture */}
+      <section className="mx-auto mt-20 max-w-6xl px-4">
+        <div className="flex flex-col items-start gap-4 rounded-3xl border border-border bg-surface px-6 py-8 sm:flex-row sm:items-center sm:px-10">
+          <div className="flex-1">
+            <h2 className="font-display text-2xl font-semibold">Looking for something else?</h2>
+            <p className="mt-2 text-muted">
+              Kuchipudi, Telugu reading, Vedic maths, carnatic violin… Tell us what you or your child want to learn and
+              when, and we&apos;ll find the right teacher in India.
+            </p>
+          </div>
+          <Link
+            href="/request"
+            className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-accent-foreground hover:bg-accent-strong"
+          >
+            Request a class
+          </Link>
+        </div>
+      </section>
+
       {/* Teach CTA */}
       <section className="mx-auto mt-20 max-w-6xl px-4">
         <div className="flex flex-col items-start gap-4 rounded-3xl border border-accent/50 bg-accent/15 px-6 py-10 sm:flex-row sm:items-center sm:px-10">

@@ -15,6 +15,9 @@ export function HeaderAuth() {
       role === "admin" ? { href: "/admin", label: "Admin" } : role === "coach" ? { href: "/coach", label: "Dashboard" } : null;
     return (
       <>
+        <Link href="/my-sessions" className="hidden rounded-full px-3 py-2 text-sm font-medium hover:bg-surface-muted sm:inline-block">
+          My sessions
+        </Link>
         {dash && (
           <Link href={dash.href} className="rounded-full px-3 py-2 text-sm font-semibold text-primary hover:bg-surface-muted">
             {dash.label}

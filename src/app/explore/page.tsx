@@ -50,7 +50,11 @@ export default async function ExplorePage({ searchParams }: { searchParams: Prom
             <Link href="/explore" className="font-semibold text-primary hover:underline">
               see all classes
             </Link>
-            . New teachers are joining every week.
+            . Or{" "}
+            <Link href="/request" className="font-semibold text-primary hover:underline">
+              tell us what you&apos;re looking for
+            </Link>{" "}
+            and we&apos;ll find a teacher.
           </p>
         </div>
       )}

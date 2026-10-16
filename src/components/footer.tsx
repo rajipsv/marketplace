@@ -4,6 +4,7 @@ import { getCategories } from "@/lib/queries";
 
 const company = [
   { label: "About us", href: "/about" },
+  { label: "Request a class", href: "/request" },
   { label: "Teach with us", href: "/teach" },
   { label: "Trust & safety", href: "/trust" },
   { label: "Help & FAQ", href: "/help" },
