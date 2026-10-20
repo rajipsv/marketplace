@@ -41,53 +41,32 @@ type SeedOffering = {
 
 export const categories: SeedCategory[] = [
   {
-    slug: "kids-culture",
-    name: "Kids & Culture",
-    blurb: "Dance, music, shlokas and mother-tongue classes",
-    icon: "Music",
-    examples: ["Bharatanatyam", "Carnatic vocal", "Tabla", "Telugu for kids"],
-  },
-  {
-    slug: "spiritual-astrology",
-    name: "Spiritual & Astrology",
-    blurb: "Vedic astrology, kundli, numerology, Gita study",
-    icon: "Sparkles",
-    examples: ["Kundli reading", "Kundli matching", "Vastu", "Gita study"],
-  },
-  {
-    slug: "puja-rituals",
-    name: "Puja & Rituals",
-    blurb: "Live-streamed pujas and havans by experienced priests",
-    icon: "Flame",
-    examples: ["Satyanarayan puja", "Griha pravesh", "Lakshmi puja"],
-  },
-  {
-    slug: "yoga-fitness",
-    name: "Yoga & Fitness",
-    blurb: "Hatha, prenatal, pranayama, Bollywood fitness",
-    icon: "Activity",
-    examples: ["Morning hatha", "Prenatal yoga", "Senior yoga"],
-  },
-  {
-    slug: "health-nutrition",
-    name: "Health & Nutrition",
-    blurb: "Ayurveda and Indian diet plans that fit US life",
-    icon: "Leaf",
-    examples: ["Ayurveda consult", "Diabetes diet", "PCOS nutrition"],
-  },
-  {
-    slug: "mind-relationships",
-    name: "Mind & Relationships",
-    blurb: "Life, parenting and couples coaching, meditation",
-    icon: "Heart",
-    examples: ["Parenting coach", "Couples coaching", "Meditation"],
-  },
-  {
-    slug: "career-learning",
-    name: "Career & Learning",
-    blurb: "Career coaching, tutoring, Vedic maths, SAT prep",
+    slug: "academics-chess-coding",
+    name: "Academics, Chess & Coding",
+    blurb: "Maths, science, test prep, chess and coding with expert tutors and coaches",
     icon: "GraduationCap",
-    examples: ["Vedic maths", "Interview prep", "SAT math"],
+    examples: ["Maths", "Science", "SAT prep", "Chess", "Coding for kids"],
+  },
+  {
+    slug: "music-dance-arts",
+    name: "Music, Dance & Arts",
+    blurb: "Vocal, instruments, classical and Bollywood dance, drawing and art",
+    icon: "Music",
+    examples: ["Carnatic vocal", "Keyboard", "Bharatanatyam", "Bollywood dance", "Drawing"],
+  },
+  {
+    slug: "fitness-yoga-sports",
+    name: "Fitness, Yoga & Sports",
+    blurb: "Personal training, yoga, meditation, Zumba and sports coaching",
+    icon: "Activity",
+    examples: ["Personal training", "Yoga", "Meditation", "Zumba", "Cricket coaching"],
+  },
+  {
+    slug: "languages-career",
+    name: "Languages & Career Coaching",
+    blurb: "Mother-tongue classes, spoken English, public speaking and career coaching",
+    icon: "Languages",
+    examples: ["Telugu", "Hindi", "Spoken English", "Public speaking", "Interview prep"],
   },
 ];
 
@@ -99,7 +78,7 @@ export const coaches: SeedCoach[] = [
     city: "Hyderabad",
     languages: ["English"], // TODO: confirm teaching languages
     yearsExperience: 0, // unknown — hidden on the site
-    categories: ["career-learning"],
+    categories: ["academics-chess-coding"],
     verified: false,
   },
   {
@@ -109,7 +88,7 @@ export const coaches: SeedCoach[] = [
     city: "", // unknown — shown as "India"
     languages: ["English"], // TODO: confirm teaching languages
     yearsExperience: 0,
-    categories: ["career-learning"],
+    categories: ["academics-chess-coding"],
     verified: false,
   },
   {
@@ -119,7 +98,7 @@ export const coaches: SeedCoach[] = [
     city: "", // unknown — shown as "India"
     languages: ["English"], // TODO: confirm teaching languages
     yearsExperience: 0,
-    categories: ["kids-culture"],
+    categories: ["music-dance-arts"],
     verified: false,
   },
 ];
@@ -130,7 +109,7 @@ export const offerings: SeedOffering[] = [
     id: "chess-sharan",
     title: "Chess Coaching with Sharan",
     coachSlug: "sharan",
-    category: "career-learning",
+    category: "academics-chess-coding",
     format: "one-on-one",
     audience: "family",
     durationMin: 60,
@@ -141,7 +120,7 @@ export const offerings: SeedOffering[] = [
     id: "maths-bhramaramba",
     title: "Maths Class with Bhramaramba",
     coachSlug: "bhramaramba",
-    category: "career-learning",
+    category: "academics-chess-coding",
     format: "one-on-one",
     audience: "kids",
     durationMin: 60,
@@ -152,7 +131,7 @@ export const offerings: SeedOffering[] = [
     id: "dance-sai",
     title: "Dance Class with Sai",
     coachSlug: "sai",
-    category: "kids-culture",
+    category: "music-dance-arts",
     format: "one-on-one",
     audience: "family",
     durationMin: 60,

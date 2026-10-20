@@ -25,12 +25,12 @@ export default function TeachPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-14">
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold text-accent-strong">For teachers and coaches in India</p>
+        <p className="text-sm font-semibold text-accent-strong">For trainers, coaches and tutors in India</p>
         <h1 className="mt-2 font-display text-4xl leading-tight font-semibold sm:text-5xl">
           Teach Indian families across the USA — from home.
         </h1>
         <p className="mt-4 text-lg text-muted">
-          Music, dance, languages, maths, chess, yoga, spiritual guidance and more. Share what you know with
+          Maths, chess, coding, music, dance, languages, fitness, yoga and more. Share what you know with
           students who want to learn it.
         </p>
         <Link

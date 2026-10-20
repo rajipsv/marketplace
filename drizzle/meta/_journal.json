@@ -36,6 +36,13 @@
       "when": 1792464016274,
       "tag": "0004_fat_sue_storm",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792464785683,
+      "tag": "0005_trainer-categories",
+      "breakpoints": true
     }
   ]
 }

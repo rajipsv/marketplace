@@ -79,7 +79,7 @@ export default function TermsPage() {
 
       <h2>10. Disclaimers and liability</h2>
       <p>
-        Classes are for learning, cultural, wellness and spiritual purposes and are not professional medical, psychological,
+        Classes are for learning, skill-building and fitness purposes and are not professional medical, psychological,
         legal or financial advice (see our <Link href="/disclaimer">Disclaimer</Link>). To the extent permitted by law, our total
         liability for any claim relating to a booking is limited to the amount you paid for that booking. We are not liable
         for indirect or consequential losses, or for interruptions caused by internet or service providers.

@@ -11,7 +11,7 @@ export function Header() {
             aria-hidden
             className="flex size-8 items-center justify-center rounded-full bg-accent text-accent-foreground"
           >
-            ॐ
+            {siteConfig.name[0]}
           </span>
           {siteConfig.name}
         </Link>

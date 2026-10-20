@@ -32,9 +32,8 @@ export async function Footer() {
       </div>
       <div className="border-t border-border">
         <p className="mx-auto max-w-6xl px-4 py-6 text-xs leading-relaxed text-muted">
-          Sessions are for learning, cultural, spiritual and wellness purposes. They are not medical,
-          psychological, legal or financial advice. Astrology and related readings are offered for
-          spiritual guidance. © {new Date().getFullYear()} {siteConfig.name} · Operated by {siteConfig.legal.businessName}.
+          Sessions are for learning, skill-building and fitness purposes. They are not medical,
+          psychological, legal or financial advice. © {new Date().getFullYear()} {siteConfig.name} · Operated by {siteConfig.legal.businessName}.
         </p>
       </div>
     </footer>

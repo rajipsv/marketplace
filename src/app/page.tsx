@@ -44,12 +44,12 @@ export default async function Home() {
             For Indian families across the USA
           </p>
           <h1 className="max-w-3xl font-display text-4xl leading-tight font-semibold sm:text-6xl">
-            Learn from India&apos;s best teachers,{" "}
+            Learn from India&apos;s best trainers &amp; coaches,{" "}
             <span className="text-primary">live in your time zone.</span>
           </h1>
           <p className="max-w-2xl text-lg text-muted">
-            Chess, maths, dance and more. Book live 1-on-1 classes with teachers in India, at
-            times that suit US families.
+            Chess, maths, coding, music, dance, fitness and more. Book live 1-on-1 classes with trainers and
+            coaches in India, at times that suit US families.
           </p>
           <HeroSearch />
         </div>
@@ -160,7 +160,7 @@ export default async function Home() {
           <div className="flex-1">
             <h2 className="font-display text-2xl font-semibold">Looking for something else?</h2>
             <p className="mt-2 text-muted">
-              Kuchipudi, Telugu reading, Vedic maths, carnatic violin… Tell us what you or your child want to learn and
+              Kuchipudi, Telugu reading, coding, cricket coaching… Tell us what you or your child want to learn and
               when, and we&apos;ll find the right teacher in India.
             </p>
           </div>

@@ -1,9 +1,9 @@
 // Brand is a PLACEHOLDER until the final name is chosen — change it here only.
 export const siteConfig = {
   name: "GuruBridge",
-  tagline: "India's best teachers, live in your time zone",
+  tagline: "Trainers and coaches from India, live in your time zone",
   description:
-    "Live 1-on-1 and group classes with teachers in India, scheduled for US evenings and weekends. Free to join.",
+    "Live 1-on-1 and group classes with trainers and coaches in India, scheduled for US evenings and weekends. Free to join.",
   supportWhatsApp: "", // e.g. "+91XXXXXXXXXX"
   // Offer code promoted on the home page and class pages (managed in Admin → Offer codes).
   promoCode: "FIRSTCLASS",

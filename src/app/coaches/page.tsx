@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Teachers",
-  description: "Verified teachers, coaches and gurus in India teaching live classes for families in the USA.",
+  description: "Trainers and coaches in India teaching live classes for families in the USA.",
 };
 
 const one = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);

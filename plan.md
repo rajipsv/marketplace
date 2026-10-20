@@ -1,6 +1,6 @@
 # GuruBridge — Implementation Plan
 
-Marketplace connecting the **Indian diaspora in the USA** (customers, free to join) with **teachers, coaches and gurus in India**. Live 1-on-1 and group classes across all categories, scheduled for US time zones.
+Marketplace connecting the **Indian diaspora in the USA** (customers, free to join) with **trainers and coaches in India** (skills, academics, arts, fitness — not spiritual services). Live 1-on-1 and group classes across all categories, scheduled for US time zones.
 
 Live: https://marketplace-ten-virid.vercel.app · Repo: https://github.com/rajipsv/marketplace
 
@@ -14,7 +14,7 @@ _Last updated: 2026-10-16_
 |---|---|
 | Company | India-registered; platform is merchant of record (INR in, INR payouts out) |
 | Customers | Indian diaspora in the USA only; free signup |
-| Categories | All: kids & culture, spiritual & astrology, puja, yoga & fitness, health & nutrition, mind & relationships, career & learning |
+| Categories | Academics, Chess & Coding · Music, Dance & Arts · Fitness, Yoga & Sports (incl. meditation) · Languages & Career Coaching. No astrology, puja or Ayurveda (decided 2026-10-19) |
 | Brand | **GuruBridge — placeholder**, change in `src/config/site.ts` |
 | Stack | Next.js 15 (App Router, TS) · Tailwind v4 · Vercel |
 | Database | Neon Postgres + Drizzle ORM (migrations in `drizzle/`) |
@@ -102,6 +102,7 @@ _Last updated: 2026-10-16_
 - [x] Offer codes: admin-managed coupons (percent off, usage limit, first-booking-only, expiry), applied safely inside the booking; `?code=` links; founding offer **FIRSTCLASS** (first class free, 20 families, until 14 Jan 2027) promoted on home + class pages
 - [x] Share buttons (WhatsApp, copy link, native share) on class and teacher pages
 - [x] Legal pages: terms, privacy, cancellation & refunds, service delivery, disclaimer, contact, about (footer links; no dead links)
+- [x] Repositioned as trainers & coaches: 4 categories, spiritual content removed (meditation kept under Fitness & Yoga), brand-initial logo; migration 0005
 - [x] Currency switched to INR everywhere (prices, filters, coupons, forms, policies); founding prices ₹899 chess / ₹449 maths / ₹899 dance; migrations 0003–0004
 
 ### Phase 4b — Payments & live classes
