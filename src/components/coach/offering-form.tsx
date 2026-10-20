@@ -13,7 +13,7 @@ export type OfferingDefaults = {
   format: "one-on-one" | "group" | "weekly-class";
   audience: "adults" | "kids" | "family";
   durationMin: number;
-  priceUsd: number;
+  priceInr: number;
   capacity: number;
   languages: string[];
   isActive: boolean;
@@ -70,15 +70,15 @@ export function OfferingForm({
           defaultValue={defaults?.durationMin ?? 60}
         />
         <TextField
-          label="Price per session (USD)"
+          label="Price per session (₹)"
           hint="Enter 0 for a free session"
-          name="priceUsd"
+          name="priceInr"
           type="number"
           min={0}
-          max={1000}
-          step="0.01"
+          max={100000}
+          step="1"
           required
-          defaultValue={defaults?.priceUsd ?? 10}
+          defaultValue={defaults?.priceInr ?? 899}
         />
         {format !== "one-on-one" && (
           <TextField

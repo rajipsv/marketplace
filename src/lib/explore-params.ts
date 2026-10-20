@@ -19,9 +19,9 @@ export const formatOptions = [
 
 export const priceOptions = [
   { value: "0", label: "Free" },
-  { value: "25", label: "Up to $25" },
-  { value: "50", label: "Up to $50" },
-  { value: "100", label: "Up to $100" },
+  { value: "500", label: "Up to ₹500" },
+  { value: "1000", label: "Up to ₹1,000" },
+  { value: "2500", label: "Up to ₹2,500" },
 ] as const;
 
 const first = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v)?.trim() || undefined;
@@ -42,6 +42,6 @@ export function parseExploreParams(sp: RawSearchParams): ExploreFilters {
     audience,
     format,
     language,
-    maxPriceUsd: price != null ? Number(price) : undefined,
+    maxPriceInr: price != null ? Number(price) : undefined,
   };
 }

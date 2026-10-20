@@ -17,7 +17,7 @@ export default function AboutPage() {
         </p>
         <p>
           {name} brings them together. Teachers in India set their hours in IST; families see every class in their own US
-          time zone, book in a few taps, pay in US dollars, and join live from the browser. Teachers are paid in rupees.
+          time zone, book in a few taps, pay securely online, and join live from the browser. Teachers are paid in rupees.
         </p>
         <p>
           Every teacher is reviewed before their profile goes live, and families can always reach a real person when they

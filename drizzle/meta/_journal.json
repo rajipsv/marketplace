@@ -22,6 +22,20 @@
       "when": 1792124245425,
       "tag": "0002_fixed_scarlet_witch",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792463949751,
+      "tag": "0003_goofy_lord_tyger",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792464016274,
+      "tag": "0004_fat_sue_storm",
+      "breakpoints": true
     }
   ]
 }

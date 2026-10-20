@@ -15,7 +15,7 @@ const trust = [
   { icon: Video, title: "Live 1-on-1 classes", text: "Real teachers in India, not recordings" },
   { icon: CalendarClock, title: "US-friendly times", text: "Shown in your time zone, with IST for reference" },
   { icon: Laptop, title: "In your browser", text: "No app or download needed" },
-  { icon: CreditCard, title: "Pay in USD", text: "Free to join. Pay only when you book" },
+  { icon: CreditCard, title: "Secure card payment", text: "Free to join. Pay only when you book" },
 ];
 
 const steps = [
@@ -180,7 +180,7 @@ export default async function Home() {
             <h2 className="font-display text-2xl font-semibold">Are you a teacher or coach in India?</h2>
             <p className="mt-2 text-muted">
               Teach students across the USA from home. You set your schedule, and we handle
-              bookings, payments in USD and payouts to your Indian bank account.
+              bookings, payments and payouts to your Indian bank account.
             </p>
           </div>
           <Link

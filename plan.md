@@ -12,7 +12,7 @@ _Last updated: 2026-10-16_
 
 | Area | Choice |
 |---|---|
-| Company | India-registered; platform is merchant of record (USD in, INR payouts out) |
+| Company | India-registered; platform is merchant of record (INR in, INR payouts out) |
 | Customers | Indian diaspora in the USA only; free signup |
 | Categories | All: kids & culture, spiritual & astrology, puja, yoga & fitness, health & nutrition, mind & relationships, career & learning |
 | Brand | **GuruBridge — placeholder**, change in `src/config/site.ts` |
@@ -20,7 +20,7 @@ _Last updated: 2026-10-16_
 | Database | Neon Postgres + Drizzle ORM (migrations in `drizzle/`) |
 | Auth | Better Auth (email/password; Google when keys set) |
 | Storage | Cloudflare R2 bucket `gurubridge-media` (presigned uploads) |
-| Payments (planned) | Razorpay International (USD) + PayPal; RazorpayX payouts (INR) |
+| Payments (planned) | **Prices and charges in INR** (decided 2026-10-19) via Razorpay with international cards enabled; RazorpayX payouts (INR). Confirm GST export treatment of INR-invoiced foreign payments with the CA |
 | Video (planned) | 100ms |
 | Email / WhatsApp (planned) | Resend · Gupshup |
 | Workflow | No localhost — push to `main`, Vercel deploys, test on live URL |
@@ -59,7 +59,7 @@ _Last updated: 2026-10-16_
 - [ ] Razorpay / RazorpayX / bank in the company's name, operated by parents
 - [ ] Over time, move Vercel, Neon, Cloudflare, GitHub and domain to company/parent-owned accounts
 
-- [ ] **Founding teachers — confirm details:** Sharan (chess, $10, Hyderabad), Bhramaramba (maths, $5), Sai (dance, $10). Needed: city (Bhramaramba, Sai), teaching languages, 1-on-1 or group, class length, kids/adults, short bio, years of experience, photo. Currently defaulted to 1-on-1 · 60 min · English; no bios; not marked verified.
+- [ ] **Founding teachers — confirm details:** Sharan (chess, ₹899, Hyderabad), Bhramaramba (maths, ₹449), Sai (dance, ₹899). Needed: city (Bhramaramba, Sai), teaching languages, 1-on-1 or group, class length, kids/adults, short bio, years of experience, photo. Currently defaulted to 1-on-1 · 60 min · English; no bios; not marked verified.
 
 - [ ] Replace `BETTER_AUTH_SECRET` in Vercel (current one was shared in chat) and redeploy
 - [ ] Final brand name + domain (then update `siteConfig`, Vercel domain, R2 CORS, `BETTER_AUTH_URL`)
@@ -102,9 +102,10 @@ _Last updated: 2026-10-16_
 - [x] Offer codes: admin-managed coupons (percent off, usage limit, first-booking-only, expiry), applied safely inside the booking; `?code=` links; founding offer **FIRSTCLASS** (first class free, 20 families, until 14 Jan 2027) promoted on home + class pages
 - [x] Share buttons (WhatsApp, copy link, native share) on class and teacher pages
 - [x] Legal pages: terms, privacy, cancellation & refunds, service delivery, disclaimer, contact, about (footer links; no dead links)
+- [x] Currency switched to INR everywhere (prices, filters, coupons, forms, policies); founding prices ₹899 chess / ₹449 maths / ₹899 dance; migrations 0003–0004
 
 ### Phase 4b — Payments & live classes
-- [ ] Checkout: Razorpay USD orders, webhook (signature, idempotency), PayPal option
+- [ ] Checkout: Razorpay INR orders (international cards), webhook (signature, idempotency), PayPal option
 - [ ] Free trial flow for kids' classes
 - [ ] My Sessions: join link, reschedule, receipts
 - [ ] 100ms video rooms, join tokens, recording (always for kids' classes)

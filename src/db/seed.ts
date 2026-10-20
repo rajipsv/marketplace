@@ -73,7 +73,7 @@ async function main() {
         format: o.format,
         audience: o.audience,
         durationMin: o.durationMin,
-        priceUsdCents: Math.round(o.priceUsd * 100),
+        priceInrPaise: Math.round(o.priceInr * 100),
         capacity: o.format === "one-on-one" ? 1 : 12,
         languages: o.languages,
         badge: o.badge ?? null,

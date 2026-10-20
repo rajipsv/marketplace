@@ -100,7 +100,7 @@ export default async function EditClassPage({
             format: o.format,
             audience: o.audience,
             durationMin: o.durationMin,
-            priceUsd: o.priceUsdCents / 100,
+            priceInr: o.priceInrPaise / 100,
             capacity: o.capacity,
             languages: o.languages,
             isActive: o.isActive,

@@ -29,7 +29,7 @@ export default async function BookPage({
       title: offering.title,
       format: offering.format,
       durationMin: offering.durationMin,
-      priceUsdCents: offering.priceUsdCents,
+      priceInrPaise: offering.priceInrPaise,
       coachId: coach.id,
       coachName: coach.displayName,
       timezone: coach.timezone,
@@ -62,7 +62,7 @@ export default async function BookPage({
         <BookingForm
           action={createBooking}
           offeringId={o.id}
-          priceUsd={o.priceUsdCents / 100}
+          priceInr={o.priceInrPaise / 100}
           selfName={user.name.split(" ")[0]}
           members={members}
           slots={slots}

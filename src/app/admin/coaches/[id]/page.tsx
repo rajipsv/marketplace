@@ -8,7 +8,7 @@ import { db } from "@/db";
 import { category, coach, coachCategory, credential, offering, user } from "@/db/schema";
 import { requireRole } from "@/lib/authz";
 import { presignDownload, r2Configured } from "@/lib/r2";
-import { coachLocation, formatUsd, mediaUrl } from "@/lib/utils";
+import { coachLocation, formatInr, mediaUrl } from "@/lib/utils";
 import { setCoachStatus, setCoachVerified, setCredentialVerified } from "../../actions";
 
 export const metadata: Metadata = { title: "Review teacher · Admin" };
@@ -34,7 +34,7 @@ export default async function AdminCoachPage({ params }: { params: Promise<{ id:
       .where(eq(coachCategory.coachId, t.id)),
     db.select().from(credential).where(eq(credential.coachId, t.id)).orderBy(asc(credential.createdAt)),
     db
-      .select({ title: offering.title, priceUsdCents: offering.priceUsdCents, isActive: offering.isActive, slug: offering.slug })
+      .select({ title: offering.title, priceInrPaise: offering.priceInrPaise, isActive: offering.isActive, slug: offering.slug })
       .from(offering)
       .where(eq(offering.coachId, t.id)),
   ]);
@@ -122,7 +122,7 @@ export default async function AdminCoachPage({ params }: { params: Promise<{ id:
           <ul className="mt-3 space-y-1 text-sm">
             {classes.map((o) => (
               <li key={o.slug}>
-                {o.title} · {formatUsd(o.priceUsdCents / 100)} {o.isActive ? "" : "(inactive)"}
+                {o.title} · {formatInr(o.priceInrPaise / 100)} {o.isActive ? "" : "(inactive)"}
               </li>
             ))}
           </ul>

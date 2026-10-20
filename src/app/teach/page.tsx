@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 const benefits = [
   { icon: Laptop, title: "Teach from home", text: "Live classes run in the browser. All you need is a laptop and good internet." },
   { icon: CalendarClock, title: "Your schedule", text: "Set your weekly hours in IST. We show them to families in their US time zone." },
-  { icon: IndianRupee, title: "Paid in INR", text: "Families pay in USD; you're paid to your Indian bank account." },
+  { icon: IndianRupee, title: "Paid in INR", text: "Families pay online by card; you're paid to your Indian bank account." },
   { icon: ShieldCheck, title: "We handle the rest", text: "Bookings, payments, reminders and support — so you can focus on teaching." },
 ];
 

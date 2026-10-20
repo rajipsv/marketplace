@@ -36,7 +36,7 @@ const offeringCardFields = {
   format: offering.format,
   audience: offering.audience,
   durationMin: offering.durationMin,
-  priceUsdCents: offering.priceUsdCents,
+  priceInrPaise: offering.priceInrPaise,
   languages: offering.languages,
   badge: offering.badge,
   coach: coachSummary,
@@ -107,7 +107,7 @@ export type ExploreFilters = {
   audience?: Audience;
   language?: string;
   format?: Format;
-  maxPriceUsd?: number;
+  maxPriceInr?: number;
   coachId?: string;
 };
 
@@ -118,7 +118,7 @@ export async function getOfferingCards(filters: ExploreFilters = {}): Promise<Of
   if (filters.audience) where.push(eq(offering.audience, filters.audience));
   if (filters.format) where.push(eq(offering.format, filters.format));
   if (filters.language) where.push(arrayContains(offering.languages, [filters.language]));
-  if (filters.maxPriceUsd != null) where.push(lte(offering.priceUsdCents, Math.round(filters.maxPriceUsd * 100)));
+  if (filters.maxPriceInr != null) where.push(lte(offering.priceInrPaise, Math.round(filters.maxPriceInr * 100)));
   if (filters.coachId) where.push(eq(offering.coachId, filters.coachId));
   if (filters.q) {
     const term = `%${filters.q.replace(/[%_\\]/g, "\\$&")}%`;
@@ -142,9 +142,9 @@ export async function getOfferingCards(filters: ExploreFilters = {}): Promise<Of
     .orderBy(asc(offering.createdAt));
 
   const next = await nextSessionTimes(rows.map((r) => r.id));
-  return rows.map(({ priceUsdCents, ...r }) => ({
+  return rows.map(({ priceInrPaise, ...r }) => ({
     ...r,
-    priceUsd: priceUsdCents / 100,
+    priceInr: priceInrPaise / 100,
     startsAt: next.get(r.id)?.toISOString() ?? null,
   }));
 }
@@ -198,10 +198,10 @@ export const getOfferingBySlug = cache(async (slug: string) => {
     .orderBy(asc(classSession.startsAt))
     .limit(8);
 
-  const { priceUsdCents, ...rest } = row;
+  const { priceInrPaise, ...rest } = row;
   return {
     ...rest,
-    priceUsd: priceUsdCents / 100,
+    priceInr: priceInrPaise / 100,
     startsAt: upcoming[0]?.startsAt.toISOString() ?? null,
     upcoming: upcoming.map((s) => ({ id: s.id, startsAt: s.startsAt.toISOString(), endsAt: s.endsAt.toISOString() })),
   };

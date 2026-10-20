@@ -1,5 +1,4 @@
-// Marketplace domain tables. Money is stored as integer minor units
-// (USD cents for customer prices, INR paise for coach payouts).
+// Marketplace domain tables. Money is stored as integer minor units (INR paise).
 // All timestamps are UTC (timestamptz); display converts to the viewer's zone.
 import { sql } from "drizzle-orm";
 import {
@@ -143,7 +142,7 @@ export const offering = pgTable(
     format: offeringFormat().notNull(),
     audience: audience().notNull().default("adults"),
     durationMin: smallint().notNull(),
-    priceUsdCents: integer().notNull(),
+    priceInrPaise: integer().notNull(),
     capacity: smallint().notNull().default(1),
     languages: text().array().notNull().default(sql`'{}'::text[]`),
     badge: offeringBadge(),
@@ -154,7 +153,7 @@ export const offering = pgTable(
   (t) => [
     index().on(t.coachId),
     index().on(t.categorySlug),
-    check("offering_price_nonnegative", sql`${t.priceUsdCents} >= 0`),
+    check("offering_price_nonnegative", sql`${t.priceInrPaise} >= 0`),
     check("offering_duration_positive", sql`${t.durationMin} > 0`),
   ],
 );
@@ -252,8 +251,8 @@ export const booking = pgTable(
       .references(() => user.id, { onDelete: "restrict" }),
     familyMemberId: uuid().references(() => familyMember.id, { onDelete: "set null" }),
     status: bookingStatus().notNull().default("pending_payment"),
-    priceUsdCents: integer().notNull(), // amount payable after any discount
-    discountUsdCents: integer().notNull().default(0),
+    priceInrPaise: integer().notNull(), // amount payable after any discount
+    discountInrPaise: integer().notNull().default(0),
     couponId: uuid().references(() => coupon.id, { onDelete: "set null" }),
     cancelledAt: timestamp({ withTimezone: true }),
     createdAt,
@@ -272,7 +271,7 @@ export const payment = pgTable(
     provider: paymentProvider().notNull(),
     providerOrderId: text().notNull(),
     providerPaymentId: text().unique(),
-    amountUsdCents: integer().notNull(),
+    amountInrPaise: integer().notNull(),
     status: paymentStatus().notNull().default("created"),
     raw: jsonb(),
     createdAt,

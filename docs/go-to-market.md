@@ -13,7 +13,7 @@ Who we serve: Indian-American families — mostly parents (30–45) booking for 
 1. **Get the three founding teachers live**
    - Each signs up at `/teach/apply` with their own email, uploads a photo and short bio, sets weekly hours in IST (aim for US evenings 6–9 pm ET = 4:30–7:30 am IST, and US weekend mornings = Indian evenings).
    - Admin approves; remove placeholder profiles.
-2. **Founding-family offer**: first class free (or $1) for the first 20 families who book — fills calendars, earns reviews.
+2. **Founding-family offer**: first class free for the first 20 families who book — fills calendars, earns reviews.
 3. **Collect demand with `/request`**: every "we don't have that yet" becomes a request in Admin → Requests. Review weekly; recruit teachers for the top 3 asked-for subjects.
 4. **Warm network first (week 1–2)**
    - Personal message to 30–50 known families in the US (friends, colleagues, relatives' contacts) with the class link and the founding offer.
@@ -45,7 +45,7 @@ Who we serve: Indian-American families — mostly parents (30–45) booking for 
 ## Messaging
 
 - One-liner: *"Live classes from India's best teachers — chess, maths, dance and more — at times that work for US families. First class free."*
-- Proof points: real teachers (photos, qualifications), times shown in your US time zone, classes in the browser, pay in USD, cancel up to 24 h before.
+- Proof points: real teachers (photos, qualifications), times shown in your US time zone, classes in the browser, secure card payment (prices in ₹), cancel up to 24 h before.
 - Avoid claims we can't back yet (e.g. "verified" only after admin verification; no "recorded classes" until video is live).
 
 ## Simple weekly scorecard

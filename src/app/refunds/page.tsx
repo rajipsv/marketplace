@@ -30,7 +30,7 @@ export default function RefundsPage() {
 
       <h2>How refunds are paid</h2>
       <ul>
-        <li>Refunds go back to the original payment method, in US dollars.</li>
+        <li>Refunds go back to the original payment method in Indian rupees (INR). If your card is in another currency, the converted amount may differ slightly from what you paid because of exchange rates.</li>
         <li>We start the refund within 2 business days; your bank usually shows it within 5–10 business days.</li>
         <li>Classes booked free or with a 100% offer code have no cash value and are not refunded in cash.</li>
       </ul>

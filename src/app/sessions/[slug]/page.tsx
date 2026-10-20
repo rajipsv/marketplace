@@ -10,7 +10,7 @@ import { siteConfig } from "@/config/site";
 import { getPromo } from "@/lib/coupons";
 import { getOfferingBySlug, type OfferingDetail } from "@/lib/queries";
 import type { Format } from "@/lib/types";
-import { coachFacts, formatUsd, mediaUrl } from "@/lib/utils";
+import { coachFacts, formatInr, mediaUrl } from "@/lib/utils";
 
 export const revalidate = 60;
 
@@ -75,11 +75,11 @@ export default async function SessionPage({ params }: Props) {
   const [offering, promo] = await Promise.all([getOfferingBySlug((await params).slug), getPromo(siteConfig.promoCode)]);
   if (!offering) notFound();
   const { coach } = offering;
-  const ctaLabel = offering.format === "one-on-one" ? "Choose a time" : offering.priceUsd === 0 ? "Book free trial" : "Book";
+  const ctaLabel = offering.format === "one-on-one" ? "Choose a time" : offering.priceInr === 0 ? "Book free trial" : "Book";
   const price = (
     <>
-      {formatUsd(offering.priceUsd)}
-      {offering.format === "weekly-class" && offering.priceUsd > 0 && (
+      {formatInr(offering.priceInr)}
+      {offering.format === "weekly-class" && offering.priceInr > 0 && (
         <span className="text-base font-normal text-muted"> / class</span>
       )}
     </>
@@ -227,8 +227,8 @@ export default async function SessionPage({ params }: Props) {
               )}
             </div>
             <BookingCta slug={offering.slug} label={ctaLabel} className="mt-5" />
-            <p className="mt-3 text-center text-xs text-muted">Pay in USD · Free to join</p>
-            {promo && offering.priceUsd > 0 && (
+            <p className="mt-3 text-center text-xs text-muted">Prices in ₹ (INR) · Free to join</p>
+            {promo && offering.priceInr > 0 && (
               <p className="mt-3 rounded-xl bg-accent/20 px-3 py-2 text-center text-xs">
                 New here? Code <span className="font-mono font-semibold">{promo.code}</span>: {promo.description.toLowerCase()}
               </p>

@@ -4,7 +4,7 @@ import { formatInTimeZone } from "date-fns-tz";
 import { db } from "@/db";
 import { booking, classSession, coach, familyMember, offering, user } from "@/db/schema";
 import { requireRole } from "@/lib/authz";
-import { formatUsd } from "@/lib/utils";
+import { formatInr } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Bookings · Admin" };
 
@@ -14,7 +14,7 @@ export default async function AdminBookingsPage() {
     .select({
       id: booking.id,
       status: booking.status,
-      priceUsdCents: booking.priceUsdCents,
+      priceInrPaise: booking.priceInrPaise,
       createdAt: booking.createdAt,
       startsAt: classSession.startsAt,
       title: offering.title,
@@ -67,7 +67,7 @@ export default async function AdminBookingsPage() {
                       {formatInTimeZone(r.startsAt, r.customerTz, "d MMM, h:mm a zzz")}
                     </span>
                   </td>
-                  <td className="px-4 py-3">{formatUsd(r.priceUsdCents / 100)}</td>
+                  <td className="px-4 py-3">{formatInr(r.priceInrPaise / 100)}</td>
                   <td className="px-4 py-3 capitalize">{r.status.replace("_", " ")}</td>
                 </tr>
               ))}

@@ -1,7 +1,7 @@
 // Catalogue loaded by `npm run db:seed`: categories plus the founding teachers.
 // Teacher accounts created here are placeholders and cannot sign in; only facts
 // the owner has confirmed are recorded (no invented bios or credentials).
-// Times are UTC (ISO 8601); prices are whole US dollars here, stored as cents.
+// Times are UTC (ISO 8601); prices are whole rupees here, stored as paise.
 
 type Format = "group" | "one-on-one" | "weekly-class";
 type Audience = "adults" | "kids" | "family";
@@ -34,7 +34,7 @@ type SeedOffering = {
   audience: Audience;
   startsAt?: string; // first scheduled session for group / weekly classes
   durationMin: number;
-  priceUsd: number;
+  priceInr: number;
   languages: string[];
   badge?: "Most loved" | "Free trial" | "Festival" | "New";
 };
@@ -134,7 +134,7 @@ export const offerings: SeedOffering[] = [
     format: "one-on-one",
     audience: "family",
     durationMin: 60,
-    priceUsd: 10,
+    priceInr: 899,
     languages: ["English"],
   },
   {
@@ -145,7 +145,7 @@ export const offerings: SeedOffering[] = [
     format: "one-on-one",
     audience: "kids",
     durationMin: 60,
-    priceUsd: 5,
+    priceInr: 449,
     languages: ["English"],
   },
   {
@@ -156,7 +156,7 @@ export const offerings: SeedOffering[] = [
     format: "one-on-one",
     audience: "family",
     durationMin: 60,
-    priceUsd: 10,
+    priceInr: 899,
     languages: ["English"],
   },
 ];

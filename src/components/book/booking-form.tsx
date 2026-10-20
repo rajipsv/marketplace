@@ -5,17 +5,17 @@ import { useActionState, useEffect, useMemo, useState } from "react";
 import { FormMessage, SubmitButton } from "@/components/forms/fields";
 import { DEFAULT_US_TZ, detectTimeZone, formatIst } from "@/lib/time";
 import type { FormState } from "@/lib/validation";
-import { cn, formatUsd } from "@/lib/utils";
+import { cn, formatInr } from "@/lib/utils";
 
 type Session = { id: string; startsAt: string; seatsLeft: number };
 type CouponPreview =
-  | { ok: true; code: string; description: string; discountCents: number; finalCents: number }
+  | { ok: true; code: string; description: string; discountPaise: number; finalPaise: number }
   | { ok: false; error: string };
 
 export function BookingForm({
   action,
   offeringId,
-  priceUsd,
+  priceInr,
   selfName,
   members,
   slots,
@@ -26,7 +26,7 @@ export function BookingForm({
 }: {
   action: (prev: FormState, fd: FormData) => Promise<FormState>;
   offeringId: string;
-  priceUsd: number;
+  priceInr: number;
   selfName: string;
   members: { id: string; name: string }[];
   slots?: string[]; // 1-on-1 start times (UTC ISO)
@@ -70,10 +70,10 @@ export function BookingForm({
     setChecking(false);
   }
   useEffect(() => {
-    if (initialCode && priceUsd > 0) void applyCode(initialCode);
+    if (initialCode && priceInr > 0) void applyCode(initialCode);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const finalUsd = coupon?.ok ? coupon.finalCents / 100 : priceUsd;
+  const finalInr = coupon?.ok ? coupon.finalPaise / 100 : priceInr;
 
   const attendeeOptions = [{ id: "self", name: `Me (${selfName})` }, ...members];
   const empty = slots ? slots.length === 0 : (sessions ?? []).length === 0;
@@ -195,7 +195,7 @@ export function BookingForm({
       </fieldset>
 
       <div className="rounded-2xl border border-border bg-surface p-5">
-        {priceUsd > 0 && (
+        {priceInr > 0 && (
           <div className="mb-4 border-b border-border pb-4">
             <label htmlFor="coupon-code" className="text-sm font-medium">
               Offer code
@@ -237,11 +237,11 @@ export function BookingForm({
         <p className="flex items-baseline justify-between">
           <span className="text-muted">Price</span>
           <span className="text-2xl font-semibold">
-            {coupon?.ok && <span className="mr-2 text-base font-normal text-muted line-through">{formatUsd(priceUsd)}</span>}
-            {formatUsd(finalUsd)}
+            {coupon?.ok && <span className="mr-2 text-base font-normal text-muted line-through">{formatInr(priceInr)}</span>}
+            {formatInr(finalInr)}
           </span>
         </p>
-        {finalUsd > 0 && (
+        {finalInr > 0 && (
           <p className="mt-2 text-sm text-muted">
             Online payment is opening soon. We&apos;ll reserve your spot now and send you a payment link before the class.
           </p>
@@ -251,7 +251,7 @@ export function BookingForm({
         </div>
         <div className="mt-3">
           {pick ? (
-            <SubmitButton className="w-full py-3">{finalUsd > 0 ? "Reserve my spot" : "Confirm booking"}</SubmitButton>
+            <SubmitButton className="w-full py-3">{finalInr > 0 ? "Reserve my spot" : "Confirm booking"}</SubmitButton>
           ) : (
             <button type="button" disabled className="w-full rounded-full bg-primary/50 px-5 py-3 text-sm font-semibold text-primary-foreground">
               Choose a {slots ? "time" : "date"} to continue

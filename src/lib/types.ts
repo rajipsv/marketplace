@@ -31,7 +31,7 @@ export type OfferingCard = {
   audience: Audience;
   startsAt: string | null; // next scheduled session (UTC ISO); null for 1-on-1
   durationMin: number;
-  priceUsd: number;
+  priceInr: number;
   languages: string[];
   badge: Badge | null;
   coach: CoachSummary;

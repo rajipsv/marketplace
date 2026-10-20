@@ -38,7 +38,7 @@ export default function TermsPage() {
 
       <h2>4. Prices and payment</h2>
       <ul>
-        <li>Prices are shown and charged in US dollars (USD) and include all platform fees. Your bank may apply its own charges.</li>
+        <li>Prices are shown and charged in Indian rupees (INR) and include all platform fees. If your card is in another currency, your bank converts the amount at its own rate and may add a foreign transaction fee.</li>
         <li>Payments are processed securely by our payment partner (Razorpay). We do not store your full card details.</li>
         <li>Offer codes have no cash value, cannot be combined, and may be withdrawn at any time.</li>
       </ul>

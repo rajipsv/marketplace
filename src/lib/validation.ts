@@ -50,7 +50,7 @@ export const offeringSchema = z.object({
   format: z.enum(["one-on-one", "group", "weekly-class"]),
   audience: z.enum(["adults", "kids", "family"]),
   durationMin: z.coerce.number().int().min(15).max(240),
-  priceUsd: z.coerce.number().min(0).max(1000),
+  priceInr: z.coerce.number().min(0).max(100000),
   capacity: z.coerce.number().int().min(1).max(50),
   languages: z.array(z.enum(languages as [string, ...string[]])).min(1, "Choose at least one language"),
   isActive: z.boolean(),

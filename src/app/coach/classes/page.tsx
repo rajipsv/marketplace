@@ -5,7 +5,7 @@ import { Plus } from "lucide-react";
 import { db } from "@/db";
 import { offering } from "@/db/schema";
 import { requireApprovedCoach } from "@/lib/authz";
-import { formatUsd } from "@/lib/utils";
+import { formatInr } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Your classes" };
 
@@ -35,7 +35,7 @@ export default async function CoachClassesPage() {
                 <span className="min-w-0 flex-1">
                   <span className="block font-semibold">{o.title}</span>
                   <span className="text-sm text-muted">
-                    {formatLabel[o.format]} · {o.durationMin} min · {formatUsd(o.priceUsdCents / 100)}
+                    {formatLabel[o.format]} · {o.durationMin} min · {formatInr(o.priceInrPaise / 100)}
                   </span>
                 </span>
                 <span

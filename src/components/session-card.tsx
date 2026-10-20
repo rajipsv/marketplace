@@ -3,7 +3,7 @@ import { BadgeCheck, Clock, Languages, Users, Video } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { LocalTime } from "@/components/local-time";
 import type { Badge, Format, OfferingCard } from "@/lib/types";
-import { cn, coachLocation, formatUsd, mediaUrl } from "@/lib/utils";
+import { cn, coachLocation, formatInr, mediaUrl } from "@/lib/utils";
 
 const formatLabel: Record<Format, string> = {
   group: "Live group",
@@ -82,8 +82,8 @@ export function SessionCard({ offering }: { offering: OfferingCard }) {
 
         <div className="flex items-center justify-between border-t border-border pt-3">
           <span className="text-lg font-semibold">
-            {formatUsd(offering.priceUsd)}
-            {offering.format === "weekly-class" && offering.priceUsd > 0 && (
+            {formatInr(offering.priceInr)}
+            {offering.format === "weekly-class" && offering.priceInr > 0 && (
               <span className="text-sm font-normal text-muted"> / class</span>
             )}
           </span>

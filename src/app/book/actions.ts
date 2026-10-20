@@ -41,7 +41,7 @@ export async function createBooking(_prev: FormState, fd: FormData): Promise<For
       id: offering.id,
       format: offering.format,
       durationMin: offering.durationMin,
-      priceUsdCents: offering.priceUsdCents,
+      priceInrPaise: offering.priceInrPaise,
       coachId: coach.id,
       coachUserId: coach.userId,
       timezone: coach.timezone,
@@ -68,16 +68,16 @@ export async function createBooking(_prev: FormState, fd: FormData): Promise<For
     let discount = 0;
     let couponId: string | null = null;
     if (p.coupon) {
-      const c = await evaluateCoupon(tx, p.coupon, userId, o.priceUsdCents, true);
+      const c = await evaluateCoupon(tx, p.coupon, userId, o.priceInrPaise, true);
       if (!c.ok) throw new BookingError(c.error);
-      discount = c.discountCents;
+      discount = c.discountPaise;
       couponId = c.id;
     }
-    const price = o.priceUsdCents - discount;
+    const price = o.priceInrPaise - discount;
     return {
       status: price === 0 ? ("confirmed" as const) : ("pending_payment" as const),
-      priceUsdCents: price,
-      discountUsdCents: discount,
+      priceInrPaise: price,
+      discountInrPaise: discount,
       couponId,
     };
   };
@@ -195,10 +195,10 @@ export async function previewCoupon(code: string, offeringId: string) {
   if (!auth) return { ok: false as const, error: "Please sign in again." };
   const id = z.string().uuid().safeParse(offeringId);
   if (!id.success) return { ok: false as const, error: "Class not found." };
-  const [o] = await db.select({ price: offering.priceUsdCents }).from(offering).where(eq(offering.id, id.data));
+  const [o] = await db.select({ price: offering.priceInrPaise }).from(offering).where(eq(offering.id, id.data));
   if (!o) return { ok: false as const, error: "Class not found." };
   const c = await evaluateCoupon(db, code.slice(0, 40), auth.user.id, o.price);
   return c.ok
-    ? { ok: true as const, code: c.code, description: c.description, discountCents: c.discountCents, finalCents: c.finalCents }
+    ? { ok: true as const, code: c.code, description: c.description, discountPaise: c.discountPaise, finalPaise: c.finalPaise }
     : c;
 }

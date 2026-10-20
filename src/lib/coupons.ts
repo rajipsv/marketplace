@@ -12,7 +12,7 @@ const redeemedStatuses = ["pending_payment", "confirmed", "completed", "no_show"
 export const normalizeCode = (code: string) => code.trim().toUpperCase().replace(/\s+/g, "");
 
 export type CouponCheck =
-  | { ok: true; id: string; code: string; description: string; percentOff: number; discountCents: number; finalCents: number }
+  | { ok: true; id: string; code: string; description: string; percentOff: number; discountPaise: number; finalPaise: number }
   | { ok: false; error: string };
 
 /**
@@ -23,7 +23,7 @@ export async function evaluateCoupon(
   conn: Conn,
   rawCode: string,
   customerUserId: string,
-  priceCents: number,
+  pricePaise: number,
   lock = false,
 ): Promise<CouponCheck> {
   const code = normalizeCode(rawCode);
@@ -33,7 +33,7 @@ export async function evaluateCoupon(
   const [c] = lock ? await q.for("update") : await q;
   if (!c || !c.isActive) return { ok: false, error: "That code isn't valid." };
   if (c.validUntil && c.validUntil.getTime() < Date.now()) return { ok: false, error: "That code has expired." };
-  if (priceCents === 0) return { ok: false, error: "This class is already free." };
+  if (pricePaise === 0) return { ok: false, error: "This class is already free." };
 
   const [{ used }] = await conn
     .select({ used: sql<number>`count(*)::int` })
@@ -55,15 +55,15 @@ export async function evaluateCoupon(
     if (prior > 0) return { ok: false, error: "This code is for your first booking only." };
   }
 
-  const discountCents = Math.min(priceCents, Math.round((priceCents * c.percentOff) / 100));
+  const discountPaise = Math.min(pricePaise, Math.round((pricePaise * c.percentOff) / 100));
   return {
     ok: true,
     id: c.id,
     code: c.code,
     description: c.description,
     percentOff: c.percentOff,
-    discountCents,
-    finalCents: priceCents - discountCents,
+    discountPaise,
+    finalPaise: pricePaise - discountPaise,
   };
 }
 

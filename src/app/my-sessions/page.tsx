@@ -7,7 +7,7 @@ import { db } from "@/db";
 import { booking, classSession, coach, familyMember, offering } from "@/db/schema";
 import { requireUser } from "@/lib/authz";
 import { CANCEL_CUTOFF_HOURS } from "@/lib/slots";
-import { formatUsd } from "@/lib/utils";
+import { formatInr } from "@/lib/utils";
 import { cancelBooking } from "../book/actions";
 
 export const metadata: Metadata = { title: "My sessions" };
@@ -29,7 +29,7 @@ export default async function MySessionsPage({ searchParams }: { searchParams: P
     .select({
       id: booking.id,
       status: booking.status,
-      priceUsdCents: booking.priceUsdCents,
+      priceInrPaise: booking.priceInrPaise,
       startsAt: classSession.startsAt,
       sessionStatus: classSession.status,
       title: offering.title,
@@ -96,7 +96,7 @@ export default async function MySessionsPage({ searchParams }: { searchParams: P
                     <LocalTime iso={r.startsAt.toISOString()} />
                   </div>
                   <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-border pt-3 text-sm">
-                    <span className="text-muted">{formatUsd(r.priceUsdCents / 100)}</span>
+                    <span className="text-muted">{formatInr(r.priceInrPaise / 100)}</span>
                     <span className="text-muted">· Join link appears here before the class</span>
                     {canCancel ? (
                       <form action={cancelBooking} className="ml-auto">
