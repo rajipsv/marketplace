@@ -47,3 +47,6 @@ next-env.d.ts
 /docs/research/screenshots/
 # auto-commit log
 /scripts/auto-commit.log
+
+# private marketing prompts (not for the public repo)
+/microdrama-series/
