@@ -7,6 +7,7 @@ import { LocalTime } from "@/components/local-time";
 import { BookingCta } from "@/components/sessions/booking-cta";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
+import { baseOpenGraph } from "@/lib/seo";
 import { siteUrl } from "@/lib/site-url";
 import { siteConfig } from "@/config/site";
 import { getPromo } from "@/lib/coupons";
@@ -26,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: offering.title,
     description,
     alternates: { canonical: `/sessions/${offering.slug}` },
-    openGraph: { title: `${offering.title} · with ${offering.coach.name}`, description, url: `/sessions/${offering.slug}` },
+    openGraph: { ...baseOpenGraph, title: offering.title, description, url: `/sessions/${offering.slug}` },
   };
 }
 

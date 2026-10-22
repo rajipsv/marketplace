@@ -6,6 +6,7 @@ import { Avatar } from "@/components/avatar";
 import { SessionCard } from "@/components/session-card";
 import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
+import { baseOpenGraph } from "@/lib/seo";
 import { siteUrl } from "@/lib/site-url";
 import { coachLocation, mediaUrl } from "@/lib/utils";
 import { getCoachBySlug } from "@/lib/queries";
@@ -23,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: coach.name,
     description,
     alternates: { canonical: `/coaches/${coach.slug}` },
-    openGraph: { title: `${coach.name} · ${coach.title}`, description, url: `/coaches/${coach.slug}`, ...(photo ? { images: [photo] } : {}) },
+    openGraph: { ...baseOpenGraph, title: `${coach.name} · ${coach.title}`, description, url: `/coaches/${coach.slug}`, ...(photo ? { images: [photo] } : {}) },
   };
 }
 
