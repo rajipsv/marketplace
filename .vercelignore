@@ -1,0 +1,2 @@
+# The mobile app is built separately (Expo/EAS), not by Vercel.
+apps/mobile
