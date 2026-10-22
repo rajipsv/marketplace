@@ -12,13 +12,15 @@ const appOrigin = `${siteConfig.appScheme}://`;
  * (browsers always send one, so web CSRF protection is unchanged) and only for
  * this app's scheme.
  */
-function withAppOrigin(req: Request) {
+async function withAppOrigin(req: Request) {
   const appHeader = req.headers.get("expo-origin");
   if (req.headers.get("origin") || !appHeader?.startsWith(appOrigin)) return req;
   const headers = new Headers(req.headers);
   headers.set("origin", appHeader);
-  return new Request(req, { headers });
+  // Copy the body explicitly: re-wrapping a streamed body is not allowed in Node.
+  const body = req.method === "GET" || req.method === "HEAD" ? undefined : await req.arrayBuffer();
+  return new Request(req.url, { method: req.method, headers, body });
 }
 
-export const GET = (req: Request) => handler.GET(withAppOrigin(req));
-export const POST = (req: Request) => handler.POST(withAppOrigin(req));
+export const GET = async (req: Request) => handler.GET(await withAppOrigin(req));
+export const POST = async (req: Request) => handler.POST(await withAppOrigin(req));
