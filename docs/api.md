@@ -11,7 +11,7 @@ Sign-in uses Better Auth with the **bearer** plugin.
 1. `POST /api/auth/sign-up/email` `{ name, email, password, timezone }` or `POST /api/auth/sign-in/email` `{ email, password }`, with header **`expo-origin: gurubridge://`** (the app's scheme, `siteConfig.appScheme`). Native apps send no `Origin`; auth calls without either are refused (anti-forgery).
 2. Read the session token from the **`set-auth-token`** response header (also returned as `token` in the body).
 3. Send it on every request: `Authorization: Bearer <token>`. Store it in the device's secure storage (Expo SecureStore).
-4. `POST /api/auth/sign-out` with the same header ends the session.
+4. `POST /api/auth/sign-out` with the same headers and a JSON body `{}` ends the session (the token stops working immediately).
 
 When building the Expo app, prefer Better Auth's official Expo client plugin (`@better-auth/expo`), which handles this automatically.
 
