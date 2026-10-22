@@ -1,14 +1,2 @@
-// Static editorial content (not yet managed in the database).
-
-export const languages = [
-  "Hindi",
-  "Tamil",
-  "Telugu",
-  "Kannada",
-  "Malayalam",
-  "Marathi",
-  "Gujarati",
-  "Bengali",
-  "Punjabi",
-  "English",
-];
+// Moved to packages/shared (used by the website and the mobile app).
+export * from "@shared/content";
