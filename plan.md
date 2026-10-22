@@ -51,7 +51,9 @@ _Last updated: 2026-10-22_
 ## ⏳ Waiting on owner
 
 - [ ] **Fill business details** in `src/config/site.ts → legal` (name, operator, address, email, phone, jurisdiction) — must match GST/bank/KYC; then have a lawyer/CA review the legal pages
-- [ ] Decide who funds free/discounted classes (does the teacher still earn their 80% on FIRSTCLASS bookings?) — affects payouts in Phase 5
+- [ ] Confirm promo funding in Admin → Settings (default: platform funds FIRSTCLASS, coach earns on full price) and TDS rate/basis with the CA (default 0.1% of amount paid)
+- [ ] Add `CRON_SECRET` (any long random string) in Vercel env so the daily settlement cron can run
+- [ ] Review the Coach agreement terms (12-month non-circumvention, 30-day notice for commission changes)
 - [ ] Before payments go live: confirmation emails (policies promise them) — Resend
 
 - [ ] **Company structure:** Indian Pvt Ltd with parents as directors (one resident director) who operate the business; confirm owner's permitted role with an immigration attorney (H-1B) and US/Indian tax filings with a cross-border CA
@@ -103,6 +105,10 @@ _Last updated: 2026-10-22_
 - [x] Share buttons (WhatsApp, copy link, native share) on class and teacher pages
 - [x] Legal pages: terms, privacy, cancellation & refunds, service delivery, disclaimer, contact, about (footer links; no dead links)
 - [x] Repositioned as trainers & coaches: 4 categories, spiritual content removed (meditation kept under Fitness & Yoga), brand-initial logo; migration 0005
+- [x] Coach agreement `/coach-agreement` (commission, payouts, conduct, child safety, non-circumvention); required checkbox on application, acceptance time stored and shown to admin
+- [x] SEO: sitemap, robots, link-preview image, page metadata + canonical URLs, structured data (Organization/WebSite search, Course + FAQ, Person)
+- [x] Installable app (PWA): manifest, icons (`scripts/generate-icons.py <letter>`), offline page, service worker, "Install the app" button
+- [x] Earnings ledger: daily settlement (Vercel Cron + admin button) completes sessions, records coach share per completed booking, refund hold → payable; Admin → Payouts (pay list with TDS, mark paid, hold, history, platform revenue); Admin → Settings (commission, TDS, hold days, promo basis); Coach → Earnings
 - [x] Currency switched to INR everywhere (prices, filters, coupons, forms, policies); founding prices ₹899 chess / ₹449 maths / ₹899 dance; migrations 0003–0004
 
 ### Phase 4b — Payments & live classes
@@ -115,11 +121,10 @@ _Last updated: 2026-10-22_
 
 ### Phase 5 — Money out, reviews, legal
 - [ ] Subscriptions for weekly classes
-- [ ] RazorpayX payouts to coaches in INR, TDS, commission ledger, reconciliation, coach earnings page
+- [ ] RazorpayX automatic payouts + coach bank/UPI/PAN capture (ledger, TDS, manual payout reports and coach earnings ✅ done)
 - [ ] Reviews (verified bookings only), ratings on cards and profiles, favourites
 - [ ] Gift sessions (offer codes ✅ done in Phase 4a)
 - [ ] WhatsApp reminders
-- [ ] Coach (teacher) agreement page (customer legal pages ✅ done in Phase 4a)
 - [ ] Child safety: parental consent, no direct coach↔child messaging, recordings
 - [ ] In-app messaging (contact details hidden), report / block
 - [ ] Admin: refunds, disputes, review moderation, reports (bookings, requests, offer codes ✅ done)
@@ -130,14 +135,14 @@ _Last updated: 2026-10-22_
 - [ ] Monitoring: Sentry, structured logs, uptime checks
 - [ ] Security: rate limiting, Turnstile on forms, security headers, `npm audit` fixes, least-privilege DB role
 - [ ] Accessibility audit (WCAG 2.2 AA) and performance (images, Core Web Vitals)
-- [ ] SEO: metadata, sitemap, robots, JSON-LD (Person, Event, FAQ)
 - [ ] Analytics (PostHog) + cookie consent
 - [ ] Backups, staging environment (Neon branch + Vercel preview)
 - [ ] Real coach photos and content; remove seed data from production
 
 ### Mobile
 - [x] Responsive web (phone-first layouts, mobile nav, sticky booking bar)
-- [ ] PWA: installable "Add to Home Screen", app icon, offline fallback page, web push reminders
+- [x] PWA: installable app, icons, offline page
+- [ ] Web push reminders
 - [ ] Native app (later, only if needed): Expo / React Native reusing the same backend (Neon, Better Auth, R2, APIs) and shared TypeScript types/validation
 
 ### Later

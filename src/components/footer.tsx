@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { InstallAppButton } from "@/components/pwa";
 import { siteConfig } from "@/config/site";
 import { getCategories } from "@/lib/queries";
 
@@ -14,6 +15,7 @@ const legal = [
   { label: "Privacy policy", href: "/privacy" },
   { label: "Cancellation & refunds", href: "/refunds" },
   { label: "Service delivery", href: "/delivery" },
+  { label: "Coach agreement", href: "/coach-agreement" },
   { label: "Disclaimer", href: "/disclaimer" },
 ];
 
@@ -25,6 +27,9 @@ export async function Footer() {
         <div>
           <p className="font-display text-xl font-semibold">{siteConfig.name}</p>
           <p className="mt-2 text-sm text-muted">{siteConfig.description}</p>
+          <div className="mt-4">
+            <InstallAppButton />
+          </div>
         </div>
         <FooterList title="Explore" items={categories.map((c) => ({ label: c.name, href: `/explore?category=${c.slug}` }))} />
         <FooterList title="Company" items={company} />

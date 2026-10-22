@@ -5,7 +5,9 @@ import { BadgeCheck, CalendarClock, Check, Clock, Languages, Users, Video } from
 import { Avatar } from "@/components/avatar";
 import { LocalTime } from "@/components/local-time";
 import { BookingCta } from "@/components/sessions/booking-cta";
+import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
+import { siteUrl } from "@/lib/site-url";
 import { siteConfig } from "@/config/site";
 import { getPromo } from "@/lib/coupons";
 import { getOfferingBySlug, type OfferingDetail } from "@/lib/queries";
@@ -19,9 +21,12 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const offering = await getOfferingBySlug((await params).slug);
   if (!offering) return { title: "Class not found" };
+  const description = offering.description ?? `${offering.title} with ${offering.coach.name}, live online for US families.`;
   return {
     title: offering.title,
-    description: offering.description ?? `${offering.title} with ${offering.coach.name}.`,
+    description,
+    alternates: { canonical: `/sessions/${offering.slug}` },
+    openGraph: { title: `${offering.title} · with ${offering.coach.name}`, description, url: `/sessions/${offering.slug}` },
   };
 }
 
@@ -85,8 +90,45 @@ export default async function SessionPage({ params }: Props) {
     </>
   );
 
+  const base = siteUrl();
   return (
     <div className="mx-auto max-w-6xl px-4 pb-28 pt-10 lg:pb-12">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Course",
+              name: offering.title,
+              description: offering.description ?? offering.title,
+              url: `${base}/sessions/${offering.slug}`,
+              inLanguage: offering.languages,
+              provider: { "@type": "Organization", name: siteConfig.name, url: base },
+              instructor: { "@type": "Person", name: coach.name, url: `${base}/coaches/${coach.slug}` },
+              offers: {
+                "@type": "Offer",
+                price: offering.priceInr,
+                priceCurrency: "INR",
+                url: `${base}/sessions/${offering.slug}`,
+                availability: "https://schema.org/InStock",
+              },
+              hasCourseInstance: {
+                "@type": "CourseInstance",
+                courseMode: "online",
+                ...(offering.startsAt ? { startDate: offering.startsAt } : {}),
+              },
+            },
+            {
+              "@type": "FAQPage",
+              mainEntity: faqs(offering).map((f) => ({
+                "@type": "Question",
+                name: f.q,
+                acceptedAnswer: { "@type": "Answer", text: f.a },
+              })),
+            },
+          ],
+        }}
+      />
       <nav aria-label="Breadcrumb" className="text-sm text-muted">
         <Link href="/explore" className="hover:text-foreground">
           Explore

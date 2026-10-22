@@ -21,6 +21,8 @@ export async function submitApplication(_prev: FormState, fd: FormData): Promise
   const userId = session.user.id;
   if (await getOwnCoach(userId)) redirect("/teach/apply");
 
+  if (fd.get("acceptAgreement") !== "on") return { error: "Please accept the Coach agreement to apply." };
+
   const parsed = coachProfileSchema(userId).safeParse(coachProfileInput(fd));
   if (!parsed.success) return { error: firstError(parsed.error) };
   const p = parsed.data;
@@ -58,6 +60,7 @@ export async function submitApplication(_prev: FormState, fd: FormData): Promise
         photoKey: p.photoKey,
         introVideoKey: p.introVideoKey,
         status: "pending",
+        agreementAcceptedAt: new Date(),
       })
       .returning({ id: coach.id });
     await tx.insert(coachCategory).values(categories.map((categorySlug) => ({ coachId: row.id, categorySlug })));

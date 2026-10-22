@@ -25,6 +25,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <Link href="/admin/coupons" className="text-muted hover:text-foreground">
             Offer codes
           </Link>
+          <Link href="/admin/payouts" className="text-muted hover:text-foreground">
+            Payouts
+          </Link>
+          <Link href="/admin/settings" className="text-muted hover:text-foreground">
+            Settings
+          </Link>
         </nav>
       </div>
       <div className="mt-8">{children}</div>

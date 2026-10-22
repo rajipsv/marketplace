@@ -63,6 +63,9 @@ export default async function AdminCoachPage({ params }: { params: Promise<{ id:
             <Row label="Experience">{t.yearsExperience ? `${t.yearsExperience} years` : "—"}</Row>
             <Row label="Languages">{t.languages.join(", ") || "—"}</Row>
             <Row label="Categories">{cats.map((x) => x.name).join(", ") || "—"}</Row>
+            <Row label="Coach agreement">
+              {t.agreementAcceptedAt ? `Accepted ${t.agreementAcceptedAt.toLocaleDateString("en-US", { dateStyle: "medium" })}` : "Not accepted"}
+            </Row>
           </dl>
           {t.introVideoKey && (
             <a

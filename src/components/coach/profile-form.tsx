@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useActionState } from "react";
 import { CheckboxGroup, FormMessage, SubmitButton, TextArea, TextField } from "@/components/forms/fields";
 import { FileUpload } from "@/components/forms/file-upload";
@@ -110,6 +111,19 @@ export function ProfileForm({
             </div>
           ))}
         </fieldset>
+      )}
+
+      {withCredentials && (
+        <label className="flex items-start gap-2 text-sm">
+          <input type="checkbox" name="acceptAgreement" required className="mt-0.5 size-4 accent-[var(--primary)]" />
+          <span>
+            I have read and agree to the{" "}
+            <Link href="/coach-agreement" target="_blank" className="font-semibold text-primary hover:underline">
+              Coach agreement
+            </Link>
+            , including the platform commission and child-safety rules.
+          </span>
+        </label>
       )}
 
       <FormMessage state={state} />

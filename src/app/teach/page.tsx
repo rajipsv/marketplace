@@ -15,7 +15,7 @@ const benefits = [
 ];
 
 const steps = [
-  "Create a free account and fill in your teaching profile",
+  "Create a free account, fill in your profile and accept the Coach agreement",
   "Upload your photo and any certificates (kept private)",
   "Our team reviews your application",
   "Once approved, add your classes and weekly availability",

@@ -4,7 +4,9 @@ import { CategoryTile } from "@/components/category-tile";
 import { CoachCard } from "@/components/coach-card";
 import { HeroSearch } from "@/components/hero-search";
 import { SessionCard } from "@/components/session-card";
+import { JsonLd } from "@/components/json-ld";
 import { siteConfig } from "@/config/site";
+import { siteUrl } from "@/lib/site-url";
 import { getPromo } from "@/lib/coupons";
 import { getCategories, getFeaturedCoaches, getOfferingCards } from "@/lib/queries";
 
@@ -34,8 +36,27 @@ export default async function Home() {
   const kids = offerings.filter((o) => o.audience === "kids").slice(0, 2);
   const popular = offerings.slice(0, 4);
 
+  const base = siteUrl();
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            { "@type": "Organization", name: siteConfig.name, url: base, logo: `${base}/icons/icon-512.png` },
+            {
+              "@type": "WebSite",
+              name: siteConfig.name,
+              url: base,
+              potentialAction: {
+                "@type": "SearchAction",
+                target: `${base}/explore?q={search_term_string}`,
+                "query-input": "required name=search_term_string",
+              },
+            },
+          ],
+        }}
+      />
       {/* Hero — search is the primary CTA (marketplace pattern) */}
       <section className="relative overflow-hidden">
         <div className="bg-rangoli absolute inset-0 opacity-40" aria-hidden />

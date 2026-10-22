@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { Award, BadgeCheck, Languages, MapPin, ShieldCheck } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { SessionCard } from "@/components/session-card";
+import { JsonLd } from "@/components/json-ld";
 import { ShareButtons } from "@/components/share-buttons";
+import { siteUrl } from "@/lib/site-url";
 import { coachLocation, mediaUrl } from "@/lib/utils";
 import { getCoachBySlug } from "@/lib/queries";
 
@@ -15,15 +17,37 @@ type Props = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const coach = await getCoachBySlug((await params).slug);
   if (!coach) return { title: "Teacher not found" };
-  return { title: coach.name, description: `${coach.name} — ${coach.title}. Live classes for families in the USA.` };
+  const description = `${coach.name} — ${coach.title}. Live online classes for families in the USA.`;
+  const photo = mediaUrl(coach.photoKey);
+  return {
+    title: coach.name,
+    description,
+    alternates: { canonical: `/coaches/${coach.slug}` },
+    openGraph: { title: `${coach.name} · ${coach.title}`, description, url: `/coaches/${coach.slug}`, ...(photo ? { images: [photo] } : {}) },
+  };
 }
 
 export default async function CoachPage({ params }: Props) {
   const coach = await getCoachBySlug((await params).slug);
   if (!coach) notFound();
 
+  const base = siteUrl();
+  const photo = mediaUrl(coach.photoKey);
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: coach.name,
+          jobTitle: coach.title,
+          url: `${base}/coaches/${coach.slug}`,
+          ...(photo ? { image: photo.startsWith("http") ? photo : `${base}${photo}` } : {}),
+          ...(coach.bio ? { description: coach.bio } : {}),
+          knowsLanguage: coach.languages,
+          ...(coach.city ? { homeLocation: { "@type": "Place", name: `${coach.city}, India` } } : {}),
+        }}
+      />
       <nav aria-label="Breadcrumb" className="text-sm text-muted">
         <Link href="/coaches" className="hover:text-foreground">
           Teachers

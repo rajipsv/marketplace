@@ -9,7 +9,8 @@ import { getCategories, getOfferingCards } from "@/lib/queries";
 
 export const metadata: Metadata = {
   title: "Explore classes",
-  description: "Find live 1-on-1 and group classes with verified teachers in India, scheduled for US time zones.",
+  description: "Find live 1-on-1 and group classes with trainers and coaches in India, scheduled for US time zones.",
+  alternates: { canonical: "/explore" },
 };
 
 export default async function ExplorePage({ searchParams }: { searchParams: Promise<RawSearchParams> }) {
