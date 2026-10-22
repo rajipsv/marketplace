@@ -60,6 +60,7 @@ _Last updated: 2026-10-22_
 - [ ] Parents sign up on the site with their own emails → `npm run make-admin -- <email>`; decide whether to keep or downgrade the current admin account
 - [ ] Razorpay / RazorpayX / bank in the company's name, operated by parents
 - [ ] Over time, move Vercel, Neon, Cloudflare, GitHub and domain to company/parent-owned accounts
+- [ ] Upgrade Vercel to **Pro** (~$20/mo, business account) before taking real payments — the free Hobby plan is for non-commercial use only
 
 - [ ] **Founding teachers — confirm details:** Sharan (chess, ₹899, Hyderabad), Bhramaramba (maths, ₹449), Sai (dance, ₹899). Needed: city (Bhramaramba, Sai), teaching languages, 1-on-1 or group, class length, kids/adults, short bio, years of experience, photo. Currently defaulted to 1-on-1 · 60 min · English; no bios; not marked verified.
 
@@ -153,7 +154,7 @@ Groundwork ✅ (done now, also used by the website):
 - [x] Better Auth bearer tokens for the app (`Authorization: Bearer …`)
 
 Build (~6–8 weeks once started):
-- [ ] Week 1: monorepo (Turborepo + pnpm) with `apps/web`, `apps/mobile`, `packages/shared`; Vercel root directory → `apps/web`; Expo sign-in with `@better-auth/expo`
+- [ ] Week 1: `packages/shared` (types, time, format, API types) + `apps/mobile` (Expo) alongside the website, which stays at the repo root so Vercel settings don't change; Expo sign-in with `@better-auth/expo`
 - [ ] Weeks 2–4: customer screens — Explore, class page, booking (slot picker in device time zone + IST), My Sessions, family, account
 - [ ] Weeks 5–6: Razorpay React Native checkout, 100ms React Native classroom, Expo push reminders (24 h / 1 h)
 - [ ] Weeks 7–8: TestFlight + Play internal testing, store listings (privacy policy, data safety), review

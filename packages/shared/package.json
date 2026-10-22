@@ -1,0 +1,8 @@
+{
+  "name": "@gurubridge/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Types and pure helpers shared by the website and the mobile app. No framework or server imports.",
+  "main": "src/index.ts",
+  "types": "src/index.ts"
+}
