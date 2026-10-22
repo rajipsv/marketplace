@@ -8,7 +8,7 @@ Base URL: `https://<site>/api/v1` · Responses: `{ "data": … }` or `{ "error":
 
 Sign-in uses Better Auth with the **bearer** plugin.
 
-1. `POST /api/auth/sign-up/email` `{ name, email, password, timezone }` or `POST /api/auth/sign-in/email` `{ email, password }`
+1. `POST /api/auth/sign-up/email` `{ name, email, password, timezone }` or `POST /api/auth/sign-in/email` `{ email, password }`, with header **`expo-origin: gurubridge://`** (the app's scheme, `siteConfig.appScheme`). Native apps send no `Origin`; auth calls without either are refused (anti-forgery).
 2. Read the session token from the **`set-auth-token`** response header (also returned as `token` in the body).
 3. Send it on every request: `Authorization: Bearer <token>`. Store it in the device's secure storage (Expo SecureStore).
 4. `POST /api/auth/sign-out` with the same header ends the session.

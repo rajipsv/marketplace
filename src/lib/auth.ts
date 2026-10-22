@@ -6,6 +6,7 @@ import { bearer } from "better-auth/plugins";
 import { headers } from "next/headers";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
+import { siteConfig } from "@/config/site";
 
 const google =
   process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
@@ -27,6 +28,7 @@ const vercelHosts = [
 ].filter(Boolean) as string[];
 
 const trustedOrigins = [
+  `${siteConfig.appScheme}://`, // mobile app (see app/api/auth/[...all]/route.ts)
   process.env.BETTER_AUTH_URL,
   process.env.NEXT_PUBLIC_SITE_URL,
   ...vercelHosts.map((host) => `https://${host}`),

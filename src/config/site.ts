@@ -7,6 +7,8 @@ export const siteConfig = {
   supportWhatsApp: "", // e.g. "+91XXXXXXXXXX"
   // Offer code promoted on the home page and class pages (managed in Admin → Offer codes).
   promoCode: "FIRSTCLASS",
+  // Deep-link scheme of the future mobile app (e.g. gurubridge://). Change with the brand.
+  appScheme: "gurubridge",
   // Business details shown on legal and contact pages. Fill these in before applying
   // to Razorpay — they must match the GST / bank / KYC documents.
   legal: {
