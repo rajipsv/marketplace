@@ -89,6 +89,7 @@ export const coach = pgTable(
     photoKey: text(), // R2 object key (public bucket path)
     introVideoKey: text(),
     payoutsEnabled: boolean().notNull().default(false),
+    agreementAcceptedAt: timestamp({ withTimezone: true }), // Coach Agreement accepted on application
     createdAt,
     updatedAt,
   },
@@ -343,3 +344,41 @@ export const classRequest = pgTable(
   },
   (t) => [index().on(t.status, t.createdAt)],
 );
+
+export const earningStatus = pgEnum("earning_status", ["held", "payable", "paid", "reversed"]);
+
+/**
+ * One row per completed booking: what the coach earns and what the platform keeps.
+ * Becomes payable after the refund hold; linked to a payout once paid.
+ */
+export const coachEarning = pgTable(
+  "coach_earning",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    bookingId: uuid()
+      .notNull()
+      .unique()
+      .references(() => booking.id, { onDelete: "restrict" }),
+    coachId: uuid()
+      .notNull()
+      .references(() => coach.id, { onDelete: "restrict" }),
+    listInrPaise: integer().notNull(), // class price before discount
+    paidInrPaise: integer().notNull(), // what the customer paid
+    baseInrPaise: integer().notNull(), // amount the split is calculated on (see settings)
+    commissionPct: smallint().notNull(),
+    commissionInrPaise: integer().notNull(),
+    coachShareInrPaise: integer().notNull(),
+    status: earningStatus().notNull().default("held"),
+    availableAt: timestamp({ withTimezone: true }).notNull(), // end of refund hold
+    payoutId: uuid().references(() => payout.id, { onDelete: "set null" }),
+    createdAt,
+  },
+  (t) => [index().on(t.coachId, t.status), index().on(t.payoutId)],
+);
+
+/** Admin-editable business settings (commission, TDS, hold period, discount basis). */
+export const setting = pgTable("setting", {
+  key: text().primaryKey(),
+  value: text().notNull(),
+  updatedAt,
+});

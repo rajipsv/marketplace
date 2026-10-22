@@ -43,6 +43,13 @@
       "when": 1792464785683,
       "tag": "0005_trainer-categories",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792690498439,
+      "tag": "0006_foamy_warhawk",
+      "breakpoints": true
     }
   ]
 }

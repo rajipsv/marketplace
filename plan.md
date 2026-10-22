@@ -4,7 +4,7 @@ Marketplace connecting the **Indian diaspora in the USA** (customers, free to jo
 
 Live: https://marketplace-ten-virid.vercel.app · Repo: https://github.com/rajipsv/marketplace
 
-_Last updated: 2026-10-16_
+_Last updated: 2026-10-22_
 
 ---
 
@@ -38,7 +38,7 @@ _Last updated: 2026-10-16_
 
 - [x] Market research: SoulSensei design teardown + page walkthrough (`docs/research/`)
 - [x] Next.js scaffold, design tokens (saffron / peacock / ivory, light + dark), Fraunces + Inter
-- [x] Home page: search hero, trust strip, categories, kids spotlight, upcoming sessions (viewer time zone + IST), festivals, teachers, how it works, languages, teach CTA
+- [x] Home page: search hero, trust strip, categories, kids spotlight, upcoming sessions (viewer time zone + IST), teachers, how it works, teach CTA
 - [x] Neon database: 17-table schema, initial migration, idempotent seed (`npm run db:seed`)
 - [x] Fictional sample teachers removed; catalogue = 3 real founding teachers
 - [x] Owner admin account (gen.rajeswari@gmail.com); auth trusts all of this project's Vercel URLs
@@ -117,12 +117,12 @@ _Last updated: 2026-10-16_
 - [ ] Subscriptions for weekly classes
 - [ ] RazorpayX payouts to coaches in INR, TDS, commission ledger, reconciliation, coach earnings page
 - [ ] Reviews (verified bookings only), ratings on cards and profiles, favourites
-- [ ] Coupons, gift sessions
+- [ ] Gift sessions (offer codes ✅ done in Phase 4a)
 - [ ] WhatsApp reminders
-- [ ] Legal pages: terms, privacy (CCPA + DPDP), refunds, disclaimer, coach agreement
+- [ ] Coach (teacher) agreement page (customer legal pages ✅ done in Phase 4a)
 - [ ] Child safety: parental consent, no direct coach↔child messaging, recordings
 - [ ] In-app messaging (contact details hidden), report / block
-- [ ] Admin: bookings, refunds, disputes, review moderation, collections, coupons, reports
+- [ ] Admin: refunds, disputes, review moderation, reports (bookings, requests, offer codes ✅ done)
 
 ### Phase 6 — Production hardening
 - [ ] Tests: Vitest (unit), Playwright (booking + payment E2E) against Vercel previews
