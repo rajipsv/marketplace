@@ -2,6 +2,7 @@ import "server-only";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
+import { bearer } from "better-auth/plugins";
 import { headers } from "next/headers";
 import { db } from "@/db";
 import * as schema from "@/db/schema";
@@ -61,7 +62,9 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24,
   },
   rateLimit: { enabled: true },
-  plugins: [nextCookies()], // must stay last
+  // bearer(): the mobile app sends "Authorization: Bearer <token>" (returned in the
+  // set-auth-token header on sign-in) instead of cookies.
+  plugins: [bearer(), nextCookies()], // nextCookies must stay last
 });
 
 export type Session = typeof auth.$Infer.Session;

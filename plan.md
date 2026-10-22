@@ -143,7 +143,26 @@ _Last updated: 2026-10-22_
 - [x] Responsive web (phone-first layouts, mobile nav, sticky booking bar)
 - [x] PWA: installable app, icons, offline page
 - [ ] Web push reminders
-- [ ] Native app (later, only if needed): Expo / React Native reusing the same backend (Neon, Better Auth, R2, APIs) and shared TypeScript types/validation
+
+### Mobile app (Expo / React Native) — build after payments + video are live on the web
+**Approach:** one repo with `apps/web` (this Next.js site), `apps/mobile` (Expo, iOS + Android) and `packages/shared` (types, validation, time/slot helpers, pricing). The app uses the same backend: Neon, Better Auth (Expo plugin, bearer tokens), R2, Razorpay, 100ms. Admin stays on the website.
+
+Groundwork ✅ (done now, also used by the website):
+- [x] Booking, coupon, family and class-request rules moved to shared services (`src/server/services`); website actions are thin wrappers
+- [x] JSON API `/api/v1` (catalogue, availability, me, family, bookings, cancel, coupon preview, requests) — see `docs/api.md`
+- [x] Better Auth bearer tokens for the app (`Authorization: Bearer …`)
+
+Build (~6–8 weeks once started):
+- [ ] Week 1: monorepo (Turborepo + pnpm) with `apps/web`, `apps/mobile`, `packages/shared`; Vercel root directory → `apps/web`; Expo sign-in with `@better-auth/expo`
+- [ ] Weeks 2–4: customer screens — Explore, class page, booking (slot picker in device time zone + IST), My Sessions, family, account
+- [ ] Weeks 5–6: Razorpay React Native checkout, 100ms React Native classroom, Expo push reminders (24 h / 1 h)
+- [ ] Weeks 7–8: TestFlight + Play internal testing, store listings (privacy policy, data safety), review
+- [ ] Later: coach features in the app (bookings, hours, earnings)
+- [ ] Optional quick win: Android Play Store listing of the website (Trusted Web Activity)
+
+Owner prerequisites:
+- [ ] Apple Developer ($99/yr) + Google Play ($25 once) in the business's name; D-U-N-S number for Apple (free, 1–2 weeks)
+- [ ] Payments: live 1-to-1 services can use Razorpay under App Review guideline 3.1.3(d); confirm group-class treatment at submission
 
 ### Later
 - [ ] Free practice video library (SEO + trust)
