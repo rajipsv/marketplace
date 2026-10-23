@@ -1,6 +1,6 @@
 import { toNextJsHandler } from "better-auth/next-js";
 import { siteConfig } from "@/config/site";
-import { auth } from "@/lib/auth";
+import { allowExpoGo, auth } from "@/lib/auth";
 
 const handler = toNextJsHandler(auth);
 const appOrigin = `${siteConfig.appScheme}://`;
@@ -14,7 +14,8 @@ const appOrigin = `${siteConfig.appScheme}://`;
  */
 async function withAppOrigin(req: Request) {
   const appHeader = req.headers.get("expo-origin");
-  if (req.headers.get("origin") || !appHeader?.startsWith(appOrigin)) return req;
+  const isApp = !!appHeader && (appHeader.startsWith(appOrigin) || (allowExpoGo && appHeader.startsWith("exp://")));
+  if (req.headers.get("origin") || !isApp) return req;
   const headers = new Headers(req.headers);
   headers.set("origin", appHeader);
   // Copy the body explicitly: re-wrapping a streamed body is not allowed in Node.

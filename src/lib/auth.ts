@@ -27,8 +27,13 @@ const vercelHosts = [
   process.env.VERCEL_URL,
 ].filter(Boolean) as string[];
 
+// Expo Go (development previews) identifies itself as exp://… — only trusted when
+// ALLOW_EXPO_GO=1 is set, e.g. while testing before a real app build exists.
+export const allowExpoGo = process.env.ALLOW_EXPO_GO === "1";
+
 const trustedOrigins = [
   `${siteConfig.appScheme}://`, // mobile app (see app/api/auth/[...all]/route.ts)
+  ...(allowExpoGo ? ["exp://", "exp://**"] : []),
   process.env.BETTER_AUTH_URL,
   process.env.NEXT_PUBLIC_SITE_URL,
   ...vercelHosts.map((host) => `https://${host}`),
