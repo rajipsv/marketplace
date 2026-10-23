@@ -21,6 +21,17 @@ export type CoachSummary = {
   yearsExperience: number;
   verified: boolean;
   photoKey: string | null;
+  /** Average of published, verified-booking reviews; null until the first review. */
+  rating: { avg: number; count: number } | null;
+};
+
+export type Review = {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  firstName: string;
+  classTitle: string;
 };
 
 export type OfferingCard = {

@@ -1,10 +1,10 @@
 // Shapes returned by /api/v1 (see docs/api.md). Dates arrive as ISO strings (UTC).
-import type { Badge, Category, CoachSummary, Format, OfferingCard } from "./types";
+import type { Badge, Category, CoachSummary, Format, OfferingCard, Review } from "./types";
 
 export type ApiSuccess<T> = { data: T };
 export type ApiFailure = { error: { code: string; message: string } };
 
-export type { Category, CoachSummary, OfferingCard };
+export type { Category, CoachSummary, OfferingCard, Review };
 
 export type OfferingDetail = OfferingCard & {
   description: string | null;
@@ -12,6 +12,7 @@ export type OfferingDetail = OfferingCard & {
   category: { slug: string; name: string };
   coachBio: string | null;
   upcoming: { id: string; startsAt: string; endsAt: string }[];
+  reviews: Review[];
 };
 
 export type Availability =
@@ -23,6 +24,7 @@ export type CoachDetail = CoachSummary & {
   categories: { slug: string; name: string }[];
   credentials: { title: string; issuer: string | null; year: number | null; verifiedAt: string | null }[];
   offerings: OfferingCard[];
+  reviews: Review[];
 };
 
 export type Me = { id: string; name: string; email: string; role: "customer" | "coach" | "admin"; timezone: string };
@@ -42,6 +44,9 @@ export type BookingItem = {
   coach: { slug: string; name: string };
   attendee: { id: string; name: string } | null;
   canCancel: boolean;
+  /** True once the class has ended and it hasn't been rated yet. */
+  canReview: boolean;
+  myRating: number | null;
 };
 
 export type BookingRequest = {

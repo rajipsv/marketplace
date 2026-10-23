@@ -4,6 +4,7 @@ import { and, arrayContains, asc, eq, gt, ilike, inArray, isNotNull, lte, or, ty
 import { db } from "@/db";
 import { category, classSession, coach, coachCategory, credential, offering } from "@/db/schema";
 import type { Audience, Category, CoachSummary, Format, OfferingCard } from "@/lib/types";
+import { ratingsFor, reviewsForCoach } from "@/server/services/reviews";
 
 export async function getCategories(): Promise<Category[]> {
   return db
@@ -39,6 +40,7 @@ const offeringCardFields = {
   priceInrPaise: offering.priceInrPaise,
   languages: offering.languages,
   badge: offering.badge,
+  coachId: coach.id, // internal: used to attach ratings, not returned
   coach: coachSummary,
 };
 
@@ -57,11 +59,13 @@ export async function getCoaches(filters: { category?: string; language?: string
       ),
     );
   }
-  return db
-    .select(coachSummary)
+  const rows = await db
+    .select({ id: coach.id, ...coachSummary })
     .from(coach)
     .where(and(...where))
     .orderBy(asc(coach.createdAt));
+  const ratings = await ratingsFor(rows.map((r) => r.id));
+  return rows.map(({ id, ...c }) => ({ ...c, rating: ratings.get(id) ?? null }));
 }
 
 export const getFeaturedCoaches = async (limit = 8) => (await getCoaches()).slice(0, limit);
@@ -74,7 +78,7 @@ export const getCoachBySlug = cache(async (slug: string) => {
     .where(and(eq(coach.slug, slug), eq(coach.status, "approved")));
   if (!row) return null;
 
-  const [categories, credentials, offerings] = await Promise.all([
+  const [categories, credentials, offerings, ratings, reviews] = await Promise.all([
     db
       .select({ slug: category.slug, name: category.name })
       .from(coachCategory)
@@ -92,11 +96,12 @@ export const getCoachBySlug = cache(async (slug: string) => {
       .where(and(eq(credential.coachId, row.id), isNotNull(credential.verifiedAt)))
       .orderBy(asc(credential.year)),
     getOfferingCards({ coachId: row.id }),
+    ratingsFor([row.id]),
+    reviewsForCoach(row.id),
   ]);
 
   const { id, ...coachFields } = row;
-  void id; // internal key, not exposed to pages
-  return { ...coachFields, categories, credentials, offerings };
+  return { ...coachFields, rating: ratings.get(id) ?? null, categories, credentials, offerings, reviews };
 });
 
 // ── Offerings ────────────────────────────────────────
@@ -141,9 +146,13 @@ export async function getOfferingCards(filters: ExploreFilters = {}): Promise<Of
     .where(and(...where))
     .orderBy(asc(offering.createdAt));
 
-  const next = await nextSessionTimes(rows.map((r) => r.id));
-  return rows.map(({ priceInrPaise, ...r }) => ({
+  const [next, ratings] = await Promise.all([
+    nextSessionTimes(rows.map((r) => r.id)),
+    ratingsFor([...new Set(rows.map((r) => r.coachId))]),
+  ]);
+  return rows.map(({ priceInrPaise, coachId, coach: c, ...r }) => ({
     ...r,
+    coach: { ...c, rating: ratings.get(coachId) ?? null },
     priceInr: priceInrPaise / 100,
     startsAt: next.get(r.id)?.toISOString() ?? null,
   }));
@@ -185,7 +194,8 @@ export const getOfferingBySlug = cache(async (slug: string) => {
     .where(and(eq(offering.slug, slug), publicOffering));
   if (!row) return null;
 
-  const upcoming = await db
+  const [upcoming, ratings, reviews] = await Promise.all([
+    db
     .select({ id: classSession.id, startsAt: classSession.startsAt, endsAt: classSession.endsAt })
     .from(classSession)
     .where(
@@ -196,11 +206,16 @@ export const getOfferingBySlug = cache(async (slug: string) => {
       ),
     )
     .orderBy(asc(classSession.startsAt))
-    .limit(8);
+    .limit(8),
+    ratingsFor([row.coachId]),
+    reviewsForCoach(row.coachId, 3),
+  ]);
 
-  const { priceInrPaise, ...rest } = row;
+  const { priceInrPaise, coachId, coach: c, ...rest } = row;
   return {
     ...rest,
+    coach: { ...c, rating: ratings.get(coachId) ?? null },
+    reviews,
     priceInr: priceInrPaise / 100,
     startsAt: upcoming[0]?.startsAt.toISOString() ?? null,
     upcoming: upcoming.map((s) => ({ id: s.id, startsAt: s.startsAt.toISOString(), endsAt: s.endsAt.toISOString() })),

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BadgeCheck, Clock, Languages, Users, Video } from "lucide-react";
 import { Avatar } from "@/components/avatar";
 import { LocalTime } from "@/components/local-time";
+import { RatingBadge } from "@/components/rating";
 import type { Badge, Format, OfferingCard } from "@/lib/types";
 import { cn, coachLocation, formatInr, mediaUrl } from "@/lib/utils";
 
@@ -52,7 +53,10 @@ export function SessionCard({ offering }: { offering: OfferingCard }) {
             {coach.name}
             {coach.verified && <BadgeCheck className="size-4 text-accent" aria-label="Verified" />}
           </p>
-          <p className="text-xs text-white/80">{coachLocation(coach.city)}</p>
+          <p className="flex items-center gap-2 text-xs text-white/80">
+            {coachLocation(coach.city)}
+            <RatingBadge rating={coach.rating} className="text-white" />
+          </p>
         </div>
       </div>
 

@@ -6,6 +6,7 @@ import { booking, classSession, coach, familyMember, offering } from "@/db/schem
 import { evaluateCoupon } from "@/lib/coupons";
 import { activeBookingStatuses, CANCEL_CUTOFF_HOURS, openSlots } from "@/lib/slots";
 import type { Result } from "./result";
+import { reviewStateFor } from "./reviews";
 
 // Shared by the website (server actions) and the mobile API (/api/v1).
 
@@ -211,9 +212,12 @@ export async function listBookings(userId: string) {
     .where(eq(booking.customerUserId, userId))
     .orderBy(desc(classSession.startsAt));
   const now = Date.now();
+  const reviews = await reviewStateFor(userId, rows.map((r) => r.id));
   return rows.map((r) => ({
     ...r,
     attendee: r.attendee?.id ? r.attendee : null,
+    canReview: reviews.get(r.id)?.canReview ?? false,
+    myRating: reviews.get(r.id)?.rating ?? null,
     canCancel:
       (r.status === "confirmed" || r.status === "pending_payment") &&
       r.startsAt.getTime() - now > CANCEL_CUTOFF_HOURS * 3600_000,

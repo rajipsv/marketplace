@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BadgeCheck } from "lucide-react";
 import { Avatar } from "@/components/avatar";
+import { RatingBadge } from "@/components/rating";
 import type { CoachSummary } from "@/lib/types";
 import { cn, coachFacts, mediaUrl } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ export function CoachCard({ coach, className }: { coach: CoachSummary; className
           {coach.verified && <BadgeCheck className="size-4 text-primary" aria-label="Verified" />}
         </p>
         <p className="text-sm text-muted">{coach.title}</p>
+        <RatingBadge rating={coach.rating} className="text-sm" long />
         <p className="mt-auto pt-2 text-xs text-muted">
           {coachFacts(coach).join(" · ")}
         </p>

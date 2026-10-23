@@ -5,6 +5,7 @@ import { Award, BadgeCheck, Languages, MapPin, ShieldCheck } from "lucide-react"
 import { Avatar } from "@/components/avatar";
 import { SessionCard } from "@/components/session-card";
 import { JsonLd } from "@/components/json-ld";
+import { RatingBadge, ReviewList } from "@/components/rating";
 import { ShareButtons } from "@/components/share-buttons";
 import { baseOpenGraph } from "@/lib/seo";
 import { siteUrl } from "@/lib/site-url";
@@ -68,6 +69,7 @@ export default async function CoachPage({ params }: Props) {
             )}
           </h1>
           <p className="mt-1 text-lg text-muted">{coach.title}</p>
+          <RatingBadge rating={coach.rating} className="mt-1 text-sm" long />
 
           <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <li className="flex items-center gap-1.5">
@@ -118,6 +120,15 @@ export default async function CoachPage({ params }: Props) {
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {coach.reviews.length > 0 && (
+        <section className="mt-10">
+          <h2 className="font-display text-2xl font-semibold">What families say</h2>
+          <div className="mt-4">
+            <ReviewList reviews={coach.reviews} />
+          </div>
         </section>
       )}
 

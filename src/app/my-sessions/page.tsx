@@ -8,7 +8,10 @@ import { booking, classSession, coach, familyMember, offering } from "@/db/schem
 import { requireUser } from "@/lib/authz";
 import { CANCEL_CUTOFF_HOURS } from "@/lib/slots";
 import { formatInr } from "@/lib/utils";
-import { cancelBooking } from "../book/actions";
+import { RateForm } from "@/components/sessions/rate-form";
+import { Stars } from "@/components/rating";
+import { reviewStateFor } from "@/server/services/reviews";
+import { cancelBooking, rateBooking } from "../book/actions";
 
 export const metadata: Metadata = { title: "My sessions" };
 
@@ -52,6 +55,7 @@ export default async function MySessionsPage({ searchParams }: { searchParams: P
   const upcoming = rows.filter((r) => isActive(r.status) && r.startsAt.getTime() > now).reverse();
   const past = rows.filter((r) => !upcoming.includes(r));
   const justBooked = rows.find((r) => r.id === sp.booked);
+  const reviewState = await reviewStateFor(user.id, past.map((r) => r.id));
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
@@ -125,21 +129,32 @@ export default async function MySessionsPage({ searchParams }: { searchParams: P
         <section className="mt-10">
           <h2 className="font-display text-xl font-semibold">Past &amp; cancelled</h2>
           <ul className="mt-3 divide-y divide-border rounded-2xl border border-border bg-surface">
-            {past.map((r) => (
-              <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm">
-                <span>
-                  <span className="font-medium">{r.title}</span>
-                  <span className="text-muted">
-                    {" "}
-                    · {r.startsAt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                    {r.attendee ? ` · ${r.attendee}` : ""}
+            {past.map((r) => {
+              const rs = reviewState.get(r.id);
+              return (
+                <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-sm">
+                  <span>
+                    <span className="font-medium">{r.title}</span>
+                    <span className="text-muted">
+                      {" "}
+                      · {r.startsAt.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      {r.attendee ? ` · ${r.attendee}` : ""}
+                    </span>
                   </span>
-                </span>
-                <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${(statusLabel[r.status] ?? statusLabel.completed).cls}`}>
-                  {r.status === "confirmed" || r.status === "pending_payment" ? "Past" : statusLabel[r.status].text}
-                </span>
-              </li>
-            ))}
+                  <span className="flex items-center gap-3">
+                    {rs?.rating ? <Stars value={rs.rating} /> : null}
+                    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${(statusLabel[r.status] ?? statusLabel.completed).cls}`}>
+                      {r.status === "confirmed" || r.status === "pending_payment" ? "Past" : statusLabel[r.status].text}
+                    </span>
+                  </span>
+                  {rs?.canReview && (
+                    <div className="w-full">
+                      <RateForm bookingId={r.id} action={rateBooking} />
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       )}

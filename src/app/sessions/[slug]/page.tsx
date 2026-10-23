@@ -6,6 +6,7 @@ import { Avatar } from "@/components/avatar";
 import { LocalTime } from "@/components/local-time";
 import { BookingCta } from "@/components/sessions/booking-cta";
 import { JsonLd } from "@/components/json-ld";
+import { RatingBadge, ReviewList } from "@/components/rating";
 import { ShareButtons } from "@/components/share-buttons";
 import { baseOpenGraph } from "@/lib/seo";
 import { siteUrl } from "@/lib/site-url";
@@ -157,6 +158,7 @@ export default async function SessionPage({ params }: Props) {
                 {coach.verified && <BadgeCheck className="size-4 text-primary" aria-label="Verified" />}
               </span>
               <span className="block text-sm text-muted">{coach.title}</span>
+              <RatingBadge rating={coach.rating} className="text-sm" long />
             </span>
           </Link>
 
@@ -222,6 +224,14 @@ export default async function SessionPage({ params }: Props) {
           )}
 
           <section className="mt-8 rounded-2xl border border-border bg-surface p-6">
+            {offering.reviews.length > 0 && (
+              <div className="mb-6">
+                <h2 className="font-display text-xl font-semibold">What families say</h2>
+                <div className="mt-3">
+                  <ReviewList reviews={offering.reviews} />
+                </div>
+              </div>
+            )}
             <h2 className="font-display text-xl font-semibold">About your teacher</h2>
             <p className="mt-1 text-sm text-muted">
               {coachFacts(coach, "years teaching").join(" · ")}
