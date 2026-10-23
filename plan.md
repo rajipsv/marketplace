@@ -53,6 +53,7 @@ _Last updated: 2026-10-22_
 - [ ] **Fill business details** in `src/config/site.ts → legal` (name, operator, address, email, phone, jurisdiction) — must match GST/bank/KYC; then have a lawyer/CA review the legal pages
 - [ ] Confirm promo funding in Admin → Settings (default: platform funds FIRSTCLASS, coach earns on full price) and TDS rate/basis with the CA (default 0.1% of amount paid)
 - [ ] Add `CRON_SECRET` (any long random string) in Vercel env so the daily settlement cron can run
+- [ ] Add `PAYOUT_ENCRYPTION_KEY` in Vercel env (copy the value from your local `.env`; keep a safe backup — without it, saved bank/UPI/PAN details can't be read)
 - [ ] Review the Coach agreement terms (12-month non-circumvention, 30-day notice for commission changes)
 - [ ] Before payments go live: confirmation emails (policies promise them) — Resend
 
@@ -122,13 +123,15 @@ _Last updated: 2026-10-22_
 
 ### Phase 5 — Money out, reviews, legal
 - [ ] Subscriptions for weekly classes
-- [ ] RazorpayX automatic payouts + coach bank/UPI/PAN capture (ledger, TDS, manual payout reports and coach earnings ✅ done)
-- [ ] Reviews (verified bookings only), ratings on cards and profiles, favourites
+- [x] Coach payout details: bank account + IFSC or UPI, PAN — encrypted (AES-256-GCM), masked for coaches, admin verifies after a ₹1 test transfer (Coach → Payout details, Admin → coach page / Payouts)
+- [ ] RazorpayX automatic payouts (ledger, TDS, manual payout reports and coach earnings ✅ done)
+- [x] Reviews (verified bookings only, after the class, one per booking) on web + app; ratings on cards, coach and class pages; admin moderation at `/admin/reviews`
+- [ ] Favourites
 - [ ] Gift sessions (offer codes ✅ done in Phase 4a)
 - [ ] WhatsApp reminders
 - [ ] Child safety: parental consent, no direct coach↔child messaging, recordings
 - [ ] In-app messaging (contact details hidden), report / block
-- [ ] Admin: refunds, disputes, review moderation, reports (bookings, requests, offer codes ✅ done)
+- [ ] Admin: refunds, disputes, reports (bookings, requests, offer codes, review moderation ✅ done)
 
 ### Phase 6 — Production hardening
 - [ ] Tests: Vitest (unit), Playwright (booking + payment E2E) against Vercel previews
@@ -150,13 +153,13 @@ _Last updated: 2026-10-22_
 
 Groundwork ✅ (done now, also used by the website):
 - [x] Booking, coupon, family and class-request rules moved to shared services (`src/server/services`); website actions are thin wrappers
-- [x] JSON API `/api/v1` (catalogue, availability, me, family, bookings, cancel, coupon preview, requests) — see `docs/api.md`
+- [x] JSON API `/api/v1` (catalogue, availability, me, family, bookings, cancel, review, coupon preview, requests) — see `docs/api.md`
 - [x] Better Auth bearer tokens for the app (`Authorization: Bearer …`)
 
 Build (~6–8 weeks once started):
 - [x] Week 1: `packages/shared` (types, time, format, API types) + `apps/mobile` (Expo SDK 58, Expo Router) alongside the website, which stays at the repo root so Vercel settings don't change; Expo sign-in with `@better-auth/expo` (secure storage), Explore + Account + Sign in/up screens on the live API; lint, typecheck and Android bundle pass (see `apps/mobile/README.md`)
 - [ ] Try the app on a phone: Expo Go (set `ALLOW_EXPO_GO=1` in Vercel temporarily) or an EAS development build
-- [x] Weeks 2–4: customer screens — Explore → class page → booking (who attends, 1-on-1 day/time picker or group dates with seats, offer codes, device time zone + IST), My sessions (upcoming/past, cancel ≥24 h), My family (add/remove), Account
+- [x] Weeks 2–4: customer screens — Explore → class page → booking (who attends, 1-on-1 day/time picker or group dates with seats, offer codes, device time zone + IST), My sessions (upcoming/past, cancel ≥24 h), My family (add/remove), Account, star rating for attended classes
 - [ ] Weeks 5–6: Razorpay React Native checkout, 100ms React Native classroom, Expo push reminders (24 h / 1 h)
 - [ ] Weeks 7–8: TestFlight + Play internal testing, store listings (privacy policy, data safety), review
 - [ ] Later: coach features in the app (bookings, hours, earnings)

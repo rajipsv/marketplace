@@ -27,10 +27,10 @@ When building the Expo app, prefer Better Auth's official Expo client plugin (`@
 |---|---|---|
 | GET | `/categories` | |
 | GET | `/offerings?q=&category=&for=me\|kids\|family&language=&format=&price=` | Same filters as Explore |
-| GET | `/offerings/:slug` | Details, coach, `upcoming` dates |
+| GET | `/offerings/:slug` | Details, coach (with `rating`), `upcoming` dates, latest `reviews` |
 | GET | `/offerings/:slug/availability` | 1-on-1 → `{ format, slots: [ISO] }`; group/weekly → `{ format, sessions: [{ id, startsAt, seatsLeft }] }` |
 | GET | `/coaches?category=&language=` | |
-| GET | `/coaches/:slug` | Profile, categories, verified credentials, classes |
+| GET | `/coaches/:slug` | Profile, `rating` (`{ avg, count }` or null), latest `reviews`, categories, verified credentials, classes |
 
 ## Signed-in
 
@@ -40,10 +40,11 @@ When building the Expo app, prefer Better Auth's official Expo client plugin (`@
 | GET | `/me/family` | | children / family members |
 | POST | `/me/family` | `{ name, birthYear?, notes? }` | 201 `{ id, name }` |
 | DELETE | `/me/family/:id` | | |
-| GET | `/me/bookings` | | bookings (newest first) with `canCancel` |
+| GET | `/me/bookings` | | bookings (newest first) with `canCancel`, `canReview`, `myRating` |
 | POST | `/coupons/preview` | `{ code, offeringId }` | `{ code, description, discountPaise, finalPaise }` |
 | POST | `/bookings` | `{ offeringId, attendee: "self"\|familyMemberId, startsAt?, sessionId?, coupon? }` | 201 `{ bookingId, status }` — `confirmed` if free, else `pending_payment` until payments go live |
 | POST | `/bookings/:id/cancel` | | allowed until 24 h before the class |
+| POST | `/bookings/:id/review` | `{ rating: 1–5, comment? }` | 201 — only after the class has ended, once per booking (409 if already rated) |
 
 ## Sign-in optional
 
