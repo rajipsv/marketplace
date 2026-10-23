@@ -23,8 +23,14 @@ npx expo export --platform android   # bundle check without a device
 1. **Expo Go (quickest):** set `ALLOW_EXPO_GO=1` in Vercel (Project → Settings → Environment Variables) and redeploy, install *Expo Go* on the phone, run `npx expo start --tunnel` here, and scan the QR code. Remove the setting when done.
 2. **Development build (closer to the real app):** create a free Expo account, then `npx eas-cli@latest build --profile development --platform android` and install the build on the phone.
 
-## Screens so far (Week 1)
+## Screens
 
-- **Explore** — categories and live classes from the website, times in the phone's time zone with IST
-- **Account** — join free / sign in; signed in: profile loaded from `/api/v1/me`, sign out
-- **Sign in / Join free** — only reachable while signed out (`Stack.Protected`)
+- **Explore** — categories and live classes; tap a class for details
+- **Class** — details, upcoming dates (phone's time zone + IST), teacher, price, Book
+- **Book** — who is attending (you or a child), 1-on-1 day/time picker or group dates with seats left, offer code (e.g. FIRSTCLASS), confirm; paid bookings are "reserved" until online payment launches
+- **My sessions** — upcoming and past bookings, cancel up to 24 hours before
+- **My family** — add or remove children
+- **Account** — join free / sign in; signed in: profile, My family, sign out
+- **Sign in / Join free** — only while signed out (`Stack.Protected`); Book and My family only while signed in
+
+Still to come: online payment (Razorpay), joining the live video class (100ms), push reminders.

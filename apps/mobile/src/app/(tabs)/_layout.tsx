@@ -12,6 +12,7 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen name="index" options={{ title: "Explore", tabBarLabel: "Explore" }} />
+      <Tabs.Screen name="sessions" options={{ title: "My sessions", tabBarLabel: "My sessions" }} />
       <Tabs.Screen name="account" options={{ title: "Account", tabBarLabel: "Account" }} />
     </Tabs>
   );

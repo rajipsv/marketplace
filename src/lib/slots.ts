@@ -6,8 +6,7 @@ import { availabilityRule, booking, classSession } from "@/db/schema";
 
 export const BOOKING_WINDOW_DAYS = 21;
 export const MIN_NOTICE_HOURS = 12;
-/** Customers can cancel up to this many hours before the start. */
-export const CANCEL_CUTOFF_HOURS = 24;
+export { CANCEL_CUTOFF_HOURS } from "@shared/time"; // single source shared with the app
 const STEP_MIN = 30;
 
 /** Booking statuses that occupy a seat. */

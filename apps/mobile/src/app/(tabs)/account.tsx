@@ -58,6 +58,7 @@ export default function AccountScreen() {
         ))}
       </View>
       <ErrorText>{error}</ErrorText>
+      <Button title="My family" onPress={() => router.push("/family")} />
       <Button title="Sign out" variant="outline" onPress={() => void signOut()} />
     </ScrollView>
   );

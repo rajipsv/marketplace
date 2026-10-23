@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { FlatList, Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 import type { Category, OfferingCard } from "@shared/api";
@@ -102,7 +103,11 @@ export default function ExploreScreen() {
       }
       ListEmptyComponent={loading ? undefined : <Text style={styles.subtitle}>No classes in this category yet.</Text>}
       renderItem={({ item: o }) => (
-        <View style={styles.card}>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push(`/class/${o.slug}`)}
+          style={({ pressed }) => [styles.card, { opacity: pressed ? 0.85 : 1 }]}
+        >
           <Text style={{ fontSize: 17, fontWeight: "700", color: colors.text }}>{o.title}</Text>
           <Text style={{ color: colors.muted }}>
             {o.coach.name} · {formatLabel[o.format]} · {o.durationMin} min
@@ -115,7 +120,7 @@ export default function ExploreScreen() {
             <Text style={{ color: colors.text }}>Pick a time that suits you</Text>
           )}
           <Text style={{ fontSize: 17, fontWeight: "700", color: colors.primary }}>{formatInr(o.priceInr)}</Text>
-        </View>
+        </Pressable>
       )}
     />
   );

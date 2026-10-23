@@ -156,7 +156,7 @@ Groundwork ✅ (done now, also used by the website):
 Build (~6–8 weeks once started):
 - [x] Week 1: `packages/shared` (types, time, format, API types) + `apps/mobile` (Expo SDK 58, Expo Router) alongside the website, which stays at the repo root so Vercel settings don't change; Expo sign-in with `@better-auth/expo` (secure storage), Explore + Account + Sign in/up screens on the live API; lint, typecheck and Android bundle pass (see `apps/mobile/README.md`)
 - [ ] Try the app on a phone: Expo Go (set `ALLOW_EXPO_GO=1` in Vercel temporarily) or an EAS development build
-- [ ] Weeks 2–4: customer screens — Explore, class page, booking (slot picker in device time zone + IST), My Sessions, family, account
+- [x] Weeks 2–4: customer screens — Explore → class page → booking (who attends, 1-on-1 day/time picker or group dates with seats, offer codes, device time zone + IST), My sessions (upcoming/past, cancel ≥24 h), My family (add/remove), Account
 - [ ] Weeks 5–6: Razorpay React Native checkout, 100ms React Native classroom, Expo push reminders (24 h / 1 h)
 - [ ] Weeks 7–8: TestFlight + Play internal testing, store listings (privacy policy, data safety), review
 - [ ] Later: coach features in the app (bookings, hours, earnings)
