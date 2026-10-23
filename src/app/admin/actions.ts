@@ -7,6 +7,7 @@ import { db } from "@/db";
 import { coach, credential, user } from "@/db/schema";
 import { assertRole } from "@/lib/authz";
 import { revalidateCatalog } from "@/lib/catalog";
+import { setPayoutVerified } from "@/server/services/payout-account";
 
 const id = z.string().uuid();
 const status = z.enum(["approved", "rejected", "suspended", "pending"]);
@@ -59,4 +60,11 @@ export async function setCredentialVerified(fd: FormData) {
     const [row] = await db.select({ slug: coach.slug }).from(coach).where(eq(coach.id, c.coachId));
     if (row) revalidateCatalog(row.slug);
   }
+}
+
+export async function setCoachPayoutVerified(fd: FormData) {
+  await assertRole(["admin"]);
+  const coachId = id.parse(fd.get("coachId"));
+  await setPayoutVerified(coachId, fd.get("verified") === "true");
+  revalidatePath("/admin", "layout");
 }

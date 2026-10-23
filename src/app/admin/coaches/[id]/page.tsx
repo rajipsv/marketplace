@@ -9,7 +9,8 @@ import { category, coach, coachCategory, credential, offering, user } from "@/db
 import { requireRole } from "@/lib/authz";
 import { presignDownload, r2Configured } from "@/lib/r2";
 import { coachLocation, formatInr, mediaUrl } from "@/lib/utils";
-import { setCoachStatus, setCoachVerified, setCredentialVerified } from "../../actions";
+import { getPayoutDetailsForAdmin } from "@/server/services/payout-account";
+import { setCoachPayoutVerified, setCoachStatus, setCoachVerified, setCredentialVerified } from "../../actions";
 
 export const metadata: Metadata = { title: "Review teacher · Admin" };
 
@@ -38,6 +39,15 @@ export default async function AdminCoachPage({ params }: { params: Promise<{ id:
       .from(offering)
       .where(eq(offering.coachId, t.id)),
   ]);
+
+  // Full payout details are decrypted only here, for the admin making the transfer.
+  let payoutDetails: Awaited<ReturnType<typeof getPayoutDetailsForAdmin>> = null;
+  let payoutError: string | null = null;
+  try {
+    payoutDetails = await getPayoutDetailsForAdmin(t.id);
+  } catch {
+    payoutError = "Saved details can't be read — check PAYOUT_ENCRYPTION_KEY in Vercel.";
+  }
 
   // Private documents: short-lived links generated per page view.
   const docLinks = r2Configured()
@@ -131,6 +141,39 @@ export default async function AdminCoachPage({ params }: { params: Promise<{ id:
           </ul>
         </section>
       )}
+
+      <section id="payout" className="rounded-2xl border border-border bg-surface p-6">
+        <h2 className="font-display text-xl font-semibold">Payout details</h2>
+        {payoutError ? (
+          <p className="mt-2 text-sm text-kumkum">{payoutError}</p>
+        ) : payoutDetails ? (
+          <>
+            <dl className="mt-3 grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2">
+              <Row label="Method">{payoutDetails.method === "bank" ? "Bank transfer" : "UPI"}</Row>
+              <Row label="Account holder">{payoutDetails.accountHolderName}</Row>
+              {payoutDetails.method === "bank" ? (
+                <>
+                  <Row label="Account no.">{payoutDetails.bankAccount}</Row>
+                  <Row label="IFSC">{payoutDetails.ifsc}</Row>
+                </>
+              ) : (
+                <Row label="UPI ID">{payoutDetails.upi}</Row>
+              )}
+              <Row label="PAN">{payoutDetails.pan}</Row>
+              <Row label="Status">{payoutDetails.verifiedAt ? "Verified" : "Not verified"}</Row>
+            </dl>
+            <form action={setCoachPayoutVerified} className="mt-4">
+              <input type="hidden" name="coachId" value={t.id} />
+              <input type="hidden" name="verified" value={payoutDetails.verifiedAt ? "false" : "true"} />
+              <button className="cursor-pointer rounded-full border border-border px-4 py-2 text-sm font-semibold hover:bg-surface-muted">
+                {payoutDetails.verifiedAt ? "Mark as not verified" : "Mark verified (after ₹1 test transfer)"}
+              </button>
+            </form>
+          </>
+        ) : (
+          <p className="mt-2 text-sm text-muted">The coach hasn&apos;t added payout details yet.</p>
+        )}
+      </section>
 
       <section className="rounded-2xl border border-border bg-surface p-6">
         <h2 className="font-display text-xl font-semibold">Decision</h2>

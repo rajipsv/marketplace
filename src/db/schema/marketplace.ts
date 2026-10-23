@@ -382,3 +382,28 @@ export const setting = pgTable("setting", {
   value: text().notNull(),
   updatedAt,
 });
+
+export const payoutMethod = pgEnum("payout_method", ["bank", "upi"]);
+
+/**
+ * Where a coach is paid. Account number, UPI ID and PAN are stored encrypted
+ * (AES-256-GCM, key in PAYOUT_ENCRYPTION_KEY); only the last 4 characters are kept
+ * in clear for display.
+ */
+export const coachPayoutAccount = pgTable("coach_payout_account", {
+  coachId: uuid()
+    .primaryKey()
+    .references(() => coach.id, { onDelete: "cascade" }),
+  method: payoutMethod().notNull(),
+  accountHolderName: text().notNull(),
+  bankAccountEnc: text(), // bank only
+  bankAccountLast4: text(),
+  ifsc: text(), // bank only (not secret: identifies the branch)
+  upiEnc: text(), // upi only
+  upiHint: text(), // e.g. "ra…@okicici"
+  panEnc: text().notNull(),
+  panLast4: text().notNull(),
+  verifiedAt: timestamp({ withTimezone: true }), // set by admin after a ₹1 test transfer
+  createdAt,
+  updatedAt,
+});

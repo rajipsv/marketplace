@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { desc, eq, inArray, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/db";
-import { coach, coachEarning, payout } from "@/db/schema";
+import { coach, coachEarning, coachPayoutAccount, payout } from "@/db/schema";
 import { assertRole, requireRole } from "@/lib/authz";
 import { payableByCoach, recordPayout, settle } from "@/lib/earnings";
 import { getSettings } from "@/lib/settings";
@@ -70,6 +71,17 @@ export default async function AdminPayoutsPage({
       : [],
   );
 
+  const accounts = new Map(
+    ids.length
+      ? (
+          await db
+            .select({ coachId: coachPayoutAccount.coachId, method: coachPayoutAccount.method, last4: coachPayoutAccount.bankAccountLast4, ifsc: coachPayoutAccount.ifsc, upiHint: coachPayoutAccount.upiHint, verifiedAt: coachPayoutAccount.verifiedAt })
+            .from(coachPayoutAccount)
+            .where(inArray(coachPayoutAccount.coachId, ids))
+        ).map((a) => [a.coachId, a])
+      : [],
+  );
+
   const [sc, ec, er] = (sp.settled ?? "").split("-");
 
   return (
@@ -132,7 +144,19 @@ export default async function AdminPayoutsPage({
               <tbody className="divide-y divide-border">
                 {payable.map((r) => (
                   <tr key={r.coachId}>
-                    <td className="px-4 py-3 font-medium">{names.get(r.coachId)}</td>
+                    <td className="px-4 py-3">
+                      <Link href={`/admin/coaches/${r.coachId}#payout`} className="font-medium hover:text-primary">
+                        {names.get(r.coachId)}
+                      </Link>
+                      <span className="block text-xs text-muted">
+                        {(() => {
+                          const a = accounts.get(r.coachId);
+                          if (!a) return "⚠ No payout details yet";
+                          const dest = a.method === "bank" ? `A/c ••••${a.last4} · ${a.ifsc}` : `UPI ${a.upiHint}`;
+                          return `${dest} · ${a.verifiedAt ? "verified" : "not verified"}`;
+                        })()}
+                      </span>
+                    </td>
                     <td className="px-4 py-3">{r.classes}</td>
                     <td className="px-4 py-3">{rupees(r.share)}</td>
                     <td className="px-4 py-3">{rupees(r.tds)}</td>

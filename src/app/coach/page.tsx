@@ -3,20 +3,21 @@ import Link from "next/link";
 import { and, count, eq, gt } from "drizzle-orm";
 import { CheckCircle2, Circle } from "lucide-react";
 import { db } from "@/db";
-import { availabilityRule, classSession, offering } from "@/db/schema";
+import { availabilityRule, classSession, coachPayoutAccount, offering } from "@/db/schema";
 import { requireApprovedCoach } from "@/lib/authz";
 
 export const metadata: Metadata = { title: "Teacher dashboard" };
 
 export default async function CoachHome() {
   const { coach } = await requireApprovedCoach("/coach");
-  const [[classes], [hours], [upcoming]] = await Promise.all([
+  const [[classes], [hours], [upcoming], [payoutRow]] = await Promise.all([
     db.select({ n: count() }).from(offering).where(and(eq(offering.coachId, coach.id), eq(offering.isActive, true))),
     db.select({ n: count() }).from(availabilityRule).where(eq(availabilityRule.coachId, coach.id)),
     db
       .select({ n: count() })
       .from(classSession)
       .where(and(eq(classSession.coachId, coach.id), eq(classSession.status, "scheduled"), gt(classSession.startsAt, new Date()))),
+    db.select({ n: count() }).from(coachPayoutAccount).where(eq(coachPayoutAccount.coachId, coach.id)),
   ]);
 
   const checklist = [
@@ -24,6 +25,7 @@ export default async function CoachHome() {
     { done: Boolean(coach.bio), label: "Write a short bio", href: "/coach/profile" },
     { done: hours.n > 0, label: "Set your weekly hours (for 1-on-1 bookings)", href: "/coach/availability" },
     { done: classes.n > 0, label: "Create your first class", href: "/coach/classes/new" },
+    { done: payoutRow.n > 0, label: "Add your bank or UPI details and PAN to get paid", href: "/coach/payout-details" },
   ];
 
   return (
