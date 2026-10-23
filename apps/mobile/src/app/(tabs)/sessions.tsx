@@ -1,6 +1,6 @@
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useState } from "react";
-import { Alert, RefreshControl, ScrollView, Text, View } from "react-native";
+import { Alert, Pressable, RefreshControl, ScrollView, Text, TextInput, View } from "react-native";
 import type { BookingItem, BookingStatus } from "@shared/api";
 import { formatPaise } from "@shared/format";
 import { CANCEL_CUTOFF_HOURS, detectTimeZone, formatIst, formatSlot } from "@shared/time";
@@ -18,6 +18,61 @@ const statusLabel: Record<BookingStatus, { text: string; color: string; bg: stri
   completed: { text: "Completed", color: colors.muted, bg: colors.surfaceMuted },
   no_show: { text: "Missed", color: colors.muted, bg: colors.surfaceMuted },
 };
+
+/** Inline 1–5 star rating for an attended class. */
+function RateBox({ bookingId, onDone }: { bookingId: string; onDone: () => void }) {
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [pending, setPending] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  async function submit() {
+    setPending(true);
+    setErr(null);
+    try {
+      await api(`/bookings/${bookingId}/review`, { method: "POST", body: { rating, comment: comment.trim() || null } });
+      onDone();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Couldn't save your rating.");
+    } finally {
+      setPending(false);
+    }
+  }
+
+  return (
+    <View style={{ gap: 8, marginTop: 6 }}>
+      <View style={{ flexDirection: "row", gap: 6 }} accessibilityRole="radiogroup" accessibilityLabel="Your rating">
+        {[1, 2, 3, 4, 5].map((i) => (
+          <Pressable
+            key={i}
+            onPress={() => setRating(i)}
+            accessibilityRole="radio"
+            accessibilityState={{ checked: rating === i }}
+            accessibilityLabel={`${i} star${i === 1 ? "" : "s"}`}
+            hitSlop={6}
+          >
+            <Text style={{ fontSize: 28, color: i <= rating ? colors.accent : colors.border }}>★</Text>
+          </Pressable>
+        ))}
+      </View>
+      {rating > 0 && (
+        <>
+          <TextInput
+            value={comment}
+            onChangeText={setComment}
+            placeholder="How was it? (optional)"
+            placeholderTextColor={colors.muted}
+            multiline
+            maxLength={1000}
+            style={[styles.input, { minHeight: 70, textAlignVertical: "top" }]}
+          />
+          <ErrorText>{err}</ErrorText>
+          <Button title="Submit rating" onPress={submit} loading={pending} />
+        </>
+      )}
+    </View>
+  );
+}
 
 export default function SessionsScreen() {
   const { data: session } = useSession();
@@ -129,12 +184,19 @@ export default function SessionsScreen() {
         <>
           <Text style={styles.label}>Past &amp; cancelled</Text>
           {past.map((b) => (
-            <View key={b.id} style={[styles.card, { flexDirection: "row", justifyContent: "space-between", gap: 8 }]}>
-              <Text style={{ color: colors.text, flex: 1 }}>
-                {b.offering.title}
-                {b.attendee ? ` · ${b.attendee.name}` : ""}
-              </Text>
-              <Text style={{ color: colors.muted }}>{active(b.status) ? "Past" : statusLabel[b.status].text}</Text>
+            <View key={b.id} style={[styles.card, { gap: 4 }]}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", gap: 8 }}>
+                <Text style={{ color: colors.text, flex: 1 }}>
+                  {b.offering.title}
+                  {b.attendee ? ` · ${b.attendee.name}` : ""}
+                </Text>
+                <Text style={{ color: colors.muted }}>{active(b.status) ? "Past" : statusLabel[b.status].text}</Text>
+              </View>
+              {b.myRating ? (
+                <Text style={{ color: colors.accent, fontSize: 16 }}>{"★".repeat(b.myRating)}</Text>
+              ) : b.canReview ? (
+                <RateBox bookingId={b.id} onDone={bookings.reload} />
+              ) : null}
             </View>
           ))}
         </>
